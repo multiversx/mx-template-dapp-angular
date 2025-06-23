@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { ConnectButtonComponent } from '../components/connect-button/connect-button.component';
 
 @Component({
   selector: 'app-unlock-page',
   standalone: true,
-  imports: [ConnectButtonComponent],
+  imports: [],
   templateUrl: './unlock-page.component.html',
-  styleUrls: ['./unlock-page.component.css']
+  styleUrls: ['./unlock-page.component.css'],
 })
-export class UnlockPageComponent {
-} 
+export class UnlockPageComponent {}
