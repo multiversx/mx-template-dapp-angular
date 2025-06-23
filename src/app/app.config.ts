@@ -2,15 +2,34 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 import { UnlockPageComponent } from './unlock-page.component';
 import { DashboardPageComponent } from './dashboard-page.component';
+import { AuthRedirectGuard } from './guards/auth-redirect.guard';
+import { RouteNamesEnum } from './route-names.enum';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter([
-      { path: '', redirectTo: 'unlock', pathMatch: 'full' },
-      { path: 'unlock', component: UnlockPageComponent },
-      { path: 'dashboard', component: DashboardPageComponent }
+      { 
+        path: '', 
+        redirectTo: RouteNamesEnum.unlock.substring(1), // Remove the leading slash
+        pathMatch: 'full' 
+      },
+      { 
+        path: RouteNamesEnum.unlock.substring(1), // Remove the leading slash
+        component: UnlockPageComponent,
+        canActivate: [AuthRedirectGuard]
+      },
+      { 
+        path: RouteNamesEnum.dashboard.substring(1), // Remove the leading slash
+        component: DashboardPageComponent,
+        canActivate: [AuthRedirectGuard],
+        data: { requireAuth: true }
+      },
+      { 
+        path: RouteNamesEnum.disclaimer.substring(1), // Remove the leading slash
+        redirectTo: RouteNamesEnum.unlock.substring(1) // For now, redirect to unlock
+      }
     ])
   ]
 };
