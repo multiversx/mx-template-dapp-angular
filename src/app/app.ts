@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { UnlockPageComponent } from './unlock-page.component';
-import { DashboardPageComponent } from './dashboard-page.component';
+import { HeaderComponent } from './components/header.component';
+import { FooterComponent } from './components/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterModule],
-  template: '<router-outlet></router-outlet>',
+  imports: [RouterModule, HeaderComponent, FooterComponent],
+  templateUrl: './app.html',
   styleUrl: './app.css'
 })
 export class App {}

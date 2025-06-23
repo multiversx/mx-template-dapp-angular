@@ -7,11 +7,12 @@ import { RouteNamesEnum } from '../route-names.enum';
 import { ButtonComponent } from './button.component';
 import { MxLinkComponent } from './mx-link.component';
 import { NotificationsButtonComponent } from './notifications-button.component';
+import { ConnectButtonComponent } from './connect-button.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, MxLinkComponent, NotificationsButtonComponent],
+  imports: [CommonModule, ButtonComponent, MxLinkComponent, NotificationsButtonComponent, ConnectButtonComponent],
   template: `
     <header class="flex flex-row align-center justify-between pl-6 pr-6 pt-6">
       <app-mx-link
@@ -39,12 +40,9 @@ import { NotificationsButtonComponent } from './notifications-button.component';
             </app-button>
           </ng-container>
 
-          <app-button
-            *ngIf="!isLoggedIn"
-            (onClick)="handleConnect()"
-          >
+          <app-connect-button *ngIf="!isLoggedIn">
             Connect
-          </app-button>
+          </app-connect-button>
         </div>
       </nav>
     </header>
@@ -70,9 +68,5 @@ export class HeaderComponent {
   async handleLogout() {
     await this.authService.logout();
     this.router.navigate([RouteNamesEnum.home]);
-  }
-
-  handleConnect() {
-    this.router.navigate([RouteNamesEnum.unlock]);
   }
 } 
