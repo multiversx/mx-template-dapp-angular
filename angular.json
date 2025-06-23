@@ -31,6 +31,15 @@
             ],
             "styles": [
               "src/styles.css"
+            ],
+            "define": {
+              "global": "globalThis"
+            },
+            "externalDependencies": [
+              "crypto",
+              "path",
+              "fs",
+              "stream"
             ]
           },
           "configurations": {
@@ -38,8 +47,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
                 },
                 {
                   "type": "anyComponentStyle",
