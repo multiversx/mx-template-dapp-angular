@@ -33,13 +33,12 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   updateAccount() {
     const account = getAccount();
-    this.address = account.address || '';
     
-    if (this.address) {
-      // Mock data for now - in a real app you'd fetch this from the API
-      this.balance = '1.5 EGLD';
-      this.shard = 1;
-      this.nonce = 42;
+    if (account) {
+      this.address = account.address;
+      this.balance = account.balance.toString();
+      this.shard = account.shard || 0;
+      this.nonce = account.nonce || 0;
       this.isLoading = false;
     }
   }

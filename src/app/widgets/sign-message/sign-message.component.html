@@ -6,20 +6,20 @@
       id="closeButton"
       (onClick)="handleClear($event)"
     >
-      {{ state === 'error' ? '🔄 Try again' : '🧹 Clear' }}
+      <fa-icon [icon]="state === 'error' ? faRotateRight : faBroom"></fa-icon>
     </app-button>
-    
+
     <app-button
       *ngIf="state === 'pending'"
       dataTestId="signMsgBtn"
       (onClick)="handleSubmit()"
       [disabled]="!message.trim()"
     >
-      ✍️ Sign
+      <fa-icon [icon]="faPen"></fa-icon> Sign
     </app-button>
   </div>
 
-  <app-output-container>
+  <app-output-container [className]="'p-0 border-0'">
     <div *ngIf="state === 'pending'">
       <textarea
         [(ngModel)]="message"
@@ -65,4 +65,4 @@
       <p>Reason: An error occurred during signing</p>
     </div>
   </app-output-container>
-</div> 
+</div>

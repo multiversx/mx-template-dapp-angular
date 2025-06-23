@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
 import { ButtonComponent } from '../../components/button/button.component';
@@ -8,7 +10,7 @@ import { contractAddress } from '../../../config';
 @Component({
   selector: 'app-ping-pong-raw',
   standalone: true,
-  imports: [CommonModule, OutputContainerComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FontAwesomeModule, OutputContainerComponent, LabelComponent, ButtonComponent],
   templateUrl: './ping-pong-raw.component.html',
   styleUrls: ['./ping-pong-raw.component.css']
 })
@@ -19,6 +21,10 @@ export class PingPongRawComponent implements OnInit {
   pongAllowed: boolean = false;
   hasPendingTransactions: boolean = false;
   timeRemaining: string = '00:00';
+  
+  // FontAwesome icons
+  faArrowUp = faArrowUp;
+  faArrowDown = faArrowDown;
 
   ngOnInit() {
     // Initialize component state

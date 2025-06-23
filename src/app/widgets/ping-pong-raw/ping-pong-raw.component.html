@@ -7,7 +7,7 @@
         dataTestId="btnPingRaw"
         dataCy="transactionBtn"
       >
-        ⬆️ Ping
+        <fa-icon [icon]="faArrowUp"></fa-icon> Ping
       </app-button>
 
       <app-button
@@ -16,7 +16,7 @@
         dataCy="transactionBtn"
         (onClick)="onSendPongTransaction()"
       >
-        ⬇️ Pong
+        <fa-icon [icon]="faArrowDown"></fa-icon> Pong
       </app-button>
     </div>
   </div>

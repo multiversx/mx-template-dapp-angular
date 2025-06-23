@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPen, faBroom, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
 import { ButtonComponent } from '../../components/button/button.component';
@@ -11,7 +13,7 @@ import { Message } from '@multiversx/sdk-core/out';
 @Component({
   selector: 'app-sign-message',
   standalone: true,
-  imports: [CommonModule, FormsModule, OutputContainerComponent, LabelComponent, ButtonComponent],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, OutputContainerComponent, LabelComponent, ButtonComponent],
   templateUrl: './sign-message.component.html',
   styleUrls: ['./sign-message.component.css']
 })
@@ -21,6 +23,11 @@ export class SignMessageComponent {
   state: 'pending' | 'success' | 'error' = 'pending';
   signature: string = '';
   address: string = '';
+
+  // FontAwesome icons
+  faPen = faPen;
+  faBroom = faBroom;
+  faRotateRight = faRotateRight;
 
   async handleSubmit() {
     try {
