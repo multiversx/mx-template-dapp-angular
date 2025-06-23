@@ -5,19 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-button',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <button
-      [id]="id"
-      [disabled]="disabled"
-      (click)="onClick.emit($event)"
-      [class]="className"
-      [type]="type"
-      [attr.data-testid]="dataTestId"
-      [attr.data-cy]="dataCy"
-    >
-      <ng-content></ng-content>
-    </button>
-  `
+  templateUrl: './button.component.html',
+  styleUrls: ['./button.component.css']
 })
 export class ButtonComponent {
   @Input() disabled = false;

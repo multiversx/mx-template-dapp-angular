@@ -5,11 +5,8 @@ import { RouterModule } from '@angular/router';
   selector: 'app-mx-link',
   standalone: true,
   imports: [RouterModule],
-  template: `
-    <a [routerLink]="to" [class]="className">
-      <ng-content></ng-content>
-    </a>
-  `
+  templateUrl: './mx-link.component.html',
+  styleUrls: ['./mx-link.component.css']
 })
 export class MxLinkComponent {
   @Input() to!: string;

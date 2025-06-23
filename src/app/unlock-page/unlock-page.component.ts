@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ConnectButtonComponent } from '../components/connect-button.component';
+import { ConnectButtonComponent } from '../components/connect-button/connect-button.component';
 
 @Component({
   selector: 'app-unlock-page',
