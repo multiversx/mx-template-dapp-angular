@@ -1,7 +1,7 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { UnlockPageComponent } from './unlock-page/unlock-page.component';
-import { DashboardPageComponent } from './dashboard-page.component';
+import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { AuthRedirectGuard } from './guards/auth-redirect.guard';
 import { RouteNamesEnum } from './route-names.enum';
 

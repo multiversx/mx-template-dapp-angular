@@ -26,6 +26,9 @@ importers:
       '@angular/router':
         specifier: ^20.0.0
         version: 20.0.4(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)(zone.js@0.15.1))(@angular/platform-browser@20.0.4(@angular/common@20.0.4(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)(zone.js@0.15.1))(rxjs@7.8.2))(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)(zone.js@0.15.1)))(rxjs@7.8.2)
+      '@multiversx/sdk-core':
+        specifier: ^14.2.2
+        version: 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
       '@multiversx/sdk-dapp':
         specifier: 5.0.0-alpha.8
         version: 5.0.0-alpha.8(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))(@stencil/core@4.35.1)(@types/react@19.1.8)(axios@1.10.0)(bignumber.js@9.3.0)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
@@ -6157,7 +6160,7 @@ snapshots:
 
   bip39@3.1.0:
     dependencies:
-      '@noble/hashes': 1.3.0
+      '@noble/hashes': 1.8.0
 
   blake2b-wasm@1.1.7:
     dependencies:
@@ -6389,7 +6392,7 @@ snapshots:
     dependencies:
       cipher-base: 1.0.6
       inherits: 2.0.4
-      ripemd160: 2.0.1
+      ripemd160: 2.0.2
       sha.js: 2.4.11
 
   create-hash@1.2.0:
@@ -7639,7 +7642,7 @@ snapshots:
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
+      '@noble/hashes': 1.8.0
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
       abitype: 1.0.8(typescript@5.8.3)

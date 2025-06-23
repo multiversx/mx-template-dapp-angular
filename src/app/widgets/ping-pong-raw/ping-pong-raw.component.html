@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-2">
+    <div class="flex justify-start gap-2">
+      <app-button
+        [disabled]="!hasPing || hasPendingTransactions"
+        (onClick)="onSendPingTransaction()"
+        dataTestId="btnPingRaw"
+        dataCy="transactionBtn"
+      >
+        ⬆️ Ping
+      </app-button>
+
+      <app-button
+        [disabled]="!pongAllowed || hasPing || hasPendingTransactions"
+        dataTestId="btnPongRaw"
+        dataCy="transactionBtn"
+        (onClick)="onSendPongTransaction()"
+      >
+        ⬇️ Pong
+      </app-button>
+    </div>
+  </div>
+
+  <app-output-container>
+    <div *ngIf="!hasPendingTransactions">
+      <p>
+        <app-label>Contract Address: </app-label>
+        <span class="text-sm font-mono">{{ contractAddress }}</span>
+      </p>
+      <p *ngIf="!pongAllowed">
+        <app-label>Time remaining: </app-label>
+        <span class="text-red-600">{{ timeRemaining }}</span> until able to pong
+      </p>
+    </div>
+    <div *ngIf="hasPendingTransactions" class="text-center p-4">
+      <p>Processing transaction...</p>
+    </div>
+  </app-output-container>
+</div> 
