@@ -12,11 +12,9 @@ import { refreshAccount } from '@multiversx/sdk-dapp/out/utils/account/refreshAc
 import { TransactionManager } from '@multiversx/sdk-dapp/out/managers/TransactionManager';
 import { getStore } from '@multiversx/sdk-dapp/out/store/store';
 import { transactionsSliceSelector } from '@multiversx/sdk-dapp/out/store/selectors/transactionsSelector';
+import { getPendingTransactions } from '@multiversx/sdk-dapp/out/methods/transactions/getPendingTransactions';
 import { Address, Transaction } from '@multiversx/sdk-core/out';
-import {
-  GAS_PRICE,
-  GAS_LIMIT,
-} from '@multiversx/sdk-dapp/out/constants/mvx.constants';
+import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
 
 @Component({
   selector: 'app-ping-pong-raw',
@@ -39,6 +37,9 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   hasPendingTransactions: boolean = false;
   timeRemaining: string = '00:00';
 
+  // Default ping amount (in wei - 1 EGLD = 10^18 wei)
+  private pingAmount: string = '1000000000000000000'; // 1 EGLD
+
   // FontAwesome icons
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
@@ -51,6 +52,7 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
     // Initialize component state
     this.checkPingPongState();
     this.subscribeToStoreChanges();
+    this.checkPendingTransactions();
   }
 
   ngOnDestroy() {
@@ -66,10 +68,21 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
     // Subscribe to store changes to track transaction status
     const store = getStore();
     this.storeUnsubscribe = store.subscribe(() => {
+      this.checkPendingTransactions();
       if (this.currentSessionId) {
         this.checkTransactionStatus();
       }
     });
+  }
+
+  private checkPendingTransactions() {
+    const pendingTransactions = getPendingTransactions();
+    this.hasPendingTransactions = pendingTransactions.length > 0;
+
+    // Update state when transactions complete
+    if (!this.hasPendingTransactions && this.currentSessionId) {
+      this.updateStateAfterTransaction();
+    }
   }
 
   private checkTransactionStatus() {
@@ -83,18 +96,8 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
 
       if (String(sessionStatus) === 'successful') {
         this.hasPendingTransactions = false;
+        this.updateStateAfterTransaction();
         this.currentSessionId = undefined;
-        // Update state based on the transaction type
-        // You would need to implement logic to determine if it was ping or pong
-        // For now, we'll toggle the state
-        this.hasPing = !this.hasPing;
-        if (!this.hasPing) {
-          this.secondsLeft = 30;
-          this.startCountdown();
-        } else {
-          this.secondsLeft = 0;
-          this.pongAllowed = false;
-        }
       } else if (
         String(sessionStatus) === 'failed' ||
         String(sessionStatus) === 'timedOut'
@@ -106,12 +109,23 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
     }
   }
 
+  private updateStateAfterTransaction() {
+    // In a real implementation, you would query the smart contract
+    // to get the actual state. For now, we'll simulate the behavior
+    this.checkPingPongState();
+  }
+
   private checkPingPongState() {
     // Mock implementation - in real app, you'd check actual contract state
+    // This simulates the ping-pong logic
     this.hasPing = true;
-    this.secondsLeft = 30;
+    this.secondsLeft = 30; // 30 seconds until pong is allowed
     this.pongAllowed = this.secondsLeft === 0;
     this.updateTimeRemaining();
+
+    if (this.secondsLeft > 0) {
+      this.startCountdown();
+    }
   }
 
   private updateTimeRemaining() {
@@ -125,7 +139,7 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   async onSendPingTransaction() {
     try {
       console.log('Sending ping transaction...');
-      await this.sendTransaction('ping');
+      await this.sendPingTransaction();
     } catch (error) {
       console.error('Error sending ping transaction:', error);
       this.hasPendingTransactions = false;
@@ -135,16 +149,48 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   async onSendPongTransaction() {
     try {
       console.log('Sending pong transaction...');
-      await this.sendTransaction('pong');
+      await this.sendPongTransaction();
     } catch (error) {
       console.error('Error sending pong transaction:', error);
       this.hasPendingTransactions = false;
     }
   }
 
-  private async sendTransaction(functionName: string) {
-    this.hasPendingTransactions = true;
+  private async sendPingTransaction() {
+    const sessionId = await this.signAndSendTransactions(
+      'ping',
+      this.pingAmount,
+      {
+        processingMessage: 'Processing Ping transaction',
+        errorMessage: 'An error has occurred during Ping',
+        successMessage: 'Ping transaction successful',
+      }
+    );
 
+    this.currentSessionId = sessionId;
+    this.hasPendingTransactions = true;
+  }
+
+  private async sendPongTransaction() {
+    const sessionId = await this.signAndSendTransactions('pong', '0', {
+      processingMessage: 'Processing Pong transaction',
+      errorMessage: 'An error has occurred during Pong',
+      successMessage: 'Pong transaction successful',
+    });
+
+    this.currentSessionId = sessionId;
+    this.hasPendingTransactions = true;
+  }
+
+  private async signAndSendTransactions(
+    functionName: string,
+    amount: string,
+    transactionsDisplayInfo: {
+      processingMessage: string;
+      errorMessage: string;
+      successMessage: string;
+    }
+  ): Promise<string> {
     // Get account data
     await refreshAccount(); // Get the latest nonce
     const account = getAccount();
@@ -156,12 +202,12 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
     // Get network configuration - for this example, we'll use devnet values
     const chainId = 'D'; // devnet chain ID
 
-    // Create the transaction
+    // Create the transaction with proper gas limits like in the React implementation
     const transaction = new Transaction({
-      value: BigInt(0),
+      value: BigInt(amount),
       data: Buffer.from(functionName, 'utf8'),
       receiver: Address.newFromBech32(this.contractAddress),
-      gasLimit: BigInt(GAS_LIMIT),
+      gasLimit: BigInt(6000000), // Same as React implementation
       gasPrice: BigInt(GAS_PRICE),
       chainID: chainId,
       nonce: BigInt(account.nonce),
@@ -179,14 +225,10 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
 
     // Track the transaction with custom messages
     const sessionId = await transactionManager.track(sentTransactions, {
-      transactionsDisplayInfo: {
-        processingMessage: `Processing ${functionName} transaction`,
-        errorMessage: `An error has occurred during ${functionName} transaction`,
-        successMessage: `${functionName} transaction successful`,
-      },
+      transactionsDisplayInfo,
     });
 
-    this.currentSessionId = sessionId;
+    return sessionId;
   }
 
   private startCountdown() {
