@@ -8,4 +8,5 @@ export { ConnectButtonComponent } from './connect-button/connect-button.componen
 export { CardComponent } from './card/card.component';
 export { WidgetComponent } from './widget/widget.component';
 export { OutputContainerComponent } from './output-container/output-container.component';
-export { LabelComponent } from './label/label.component'; 
+export { LabelComponent } from './label/label.component';
+export { FormatAmountComponent } from './format-amount/format-amount.component';

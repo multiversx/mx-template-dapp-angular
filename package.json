@@ -28,6 +28,8 @@
     "@multiversx/sdk-core": "14.2.2",
     "@multiversx/sdk-dapp": "5.0.0-alpha.8",
     "@multiversx/sdk-dapp-ui": "0.0.7",
+    "@multiversx/sdk-dapp-utils": "^2.0.0",
+    "buffer": "^6.0.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
@@ -36,6 +38,8 @@
     "@angular/build": "^20.0.3",
     "@angular/cli": "^20.0.3",
     "@angular/compiler-cli": "^20.0.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "^0.2.2",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^24.0.3",
     "autoprefixer": "^10.4.21",
