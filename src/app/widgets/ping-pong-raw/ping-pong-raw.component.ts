@@ -20,7 +20,6 @@ import {
 import BigNumber from 'bignumber.js';
 
 interface ViewState {
-  pingAmount: string;
   timeToPong: number | null;
   timeRemaining: string;
   canPing: boolean;
@@ -50,7 +49,6 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
 
   // State
   viewState: ViewState = {
-    pingAmount: '0',
     timeToPong: null,
     timeRemaining: '00:00',
     canPing: true,
@@ -78,18 +76,16 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
 
   private initializeComponent(): void {
     combineLatest([
-      this.pingPongService.pingAmount$,
       this.pingPongService.timeToPong$,
       this.pingPongService.loading$,
       this.pingPongService.error$,
     ])
       .pipe(
-        map(([pingAmount, timeToPong, isLoading, error]) => {
+        map(([timeToPong, isLoading, error]) => {
           const pingPongState = calculatePingPongState(timeToPong);
           const timeRemaining = formatTimeRemaining(timeToPong || 0);
 
           return {
-            pingAmount,
             timeToPong,
             timeRemaining,
             canPing: pingPongState.canPing,

@@ -1,5 +1,13 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, timer, EMPTY, Subject, of } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  timer,
+  EMPTY,
+  Subject,
+  of,
+  firstValueFrom,
+} from 'rxjs';
 import {
   switchMap,
   map,
@@ -26,17 +34,6 @@ export interface PingPongResponseType {
       returnData: string[];
     };
   };
-}
-
-export interface NetworkConfig {
-  network: {
-    apiAddress: string;
-    chainId: string;
-  };
-}
-
-export interface Account {
-  address: string;
 }
 
 export interface TransactionsDisplayInfoType {
@@ -75,13 +72,6 @@ export class PingPongService implements OnDestroy {
   public readonly loading$ = this.loadingSubject.asObservable();
   public readonly error$ = this.errorSubject.asObservable();
 
-  // Auto-refreshing observables
-  public readonly pingAmountRefresh$ = timer(0, 30000).pipe(
-    takeUntil(this.destroy$),
-    switchMap(() => this.fetchPingAmount()),
-    shareReplay(1)
-  );
-
   public readonly timeToPongRefresh$ = timer(0, 1000).pipe(
     takeUntil(this.destroy$),
     switchMap(() => this.fetchTimeToPong()),
@@ -113,25 +103,25 @@ export class PingPongService implements OnDestroy {
 
   // Private methods
   private initializeAutoRefresh(): void {
-    this.pingAmountRefresh$.subscribe({
-      next: amount => this.pingAmountSubject.next(amount),
-      error: error => this.handleError('Failed to fetch ping amount', error),
-    });
-
     this.timeToPongRefresh$.subscribe({
       next: time => this.timeToPongSubject.next(time),
       error: error => this.handleError('Failed to fetch time to pong', error),
     });
   }
 
-  private fetchPingAmount(): Observable<string> {
-    return this.makeVmQuery('getPingAmount', []).pipe(
-      map(data => this.decodeAmount(data)),
-      catchError(error => {
-        console.error('Unable to call getPingAmount', error);
-        return EMPTY;
-      })
-    );
+  private async fetchPingAmount(): Promise<string> {
+    try {
+      const data = await firstValueFrom(this.makeVmQuery('getPingAmount', []));
+
+      if (!data) {
+        return '0';
+      }
+
+      return this.decodeAmount(data);
+    } catch (error) {
+      console.error('Unable to call getPingAmount', error);
+      return '0';
+    }
   }
 
   private fetchTimeToPong(): Observable<number | null> {
@@ -203,22 +193,17 @@ export class PingPongService implements OnDestroy {
     this.loadingSubject.next(false);
   }
 
-  // Public methods for manual refresh
-  public refreshPingAmount(): Observable<string> {
-    return this.fetchPingAmount();
-  }
-
   public refreshTimeToPong(): Observable<number | null> {
     return this.fetchTimeToPong();
   }
 
   // Transaction methods (simplified - in real app would use proper MultiversX services)
-  public async sendPingTransaction(amount?: string): Promise<string> {
+  public async sendPingTransaction(): Promise<string> {
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
 
     try {
-      const pingAmount = amount || this.currentPingAmount;
+      const pingAmount = await this.fetchPingAmount();
       const account = getAccount();
       const networkConfig = getNetworkConfig();
 
