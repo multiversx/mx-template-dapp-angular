@@ -1,7 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { Subject, combineLatest } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
+
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { ButtonComponent } from '../../components/button/button.component';
 import {
@@ -11,11 +14,20 @@ import {
 import { contractAddress } from '../../../config';
 import { PingPongService } from '../../services/ping-pong.service';
 import {
+  calculatePingPongState,
   formatTimeRemaining,
-  getCountdownSeconds,
-  setTimeRemaining,
 } from '../../helpers/countdown.helpers';
-import { Subscription } from 'rxjs';
+import BigNumber from 'bignumber.js';
+
+interface ViewState {
+  pingAmount: string;
+  timeToPong: number | null;
+  timeRemaining: string;
+  canPing: boolean;
+  canPong: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
 
 @Component({
   selector: 'app-ping-pong-raw',
@@ -31,147 +43,94 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./ping-pong-raw.component.css'],
 })
 export class PingPongRawComponent implements OnInit, OnDestroy {
-  contractAddress = contractAddress;
-  hasPing: boolean = true;
-  secondsLeft: number = 0;
-  pongAllowed: boolean = false;
-  hasPendingTransactions: boolean = false;
-  timeRemaining: string = '00:00';
-  transactions: SignedTransactionType[] = [];
-  pingAmount: string = '';
+  // Icons
+  readonly faArrowUp = faArrowUp;
+  readonly faArrowDown = faArrowDown;
+  readonly contractAddress = contractAddress;
 
-  // FontAwesome icons
-  faArrowUp = faArrowUp;
-  faArrowDown = faArrowDown;
+  // State
+  viewState: ViewState = {
+    pingAmount: '0',
+    timeToPong: null,
+    timeRemaining: '00:00',
+    canPing: true,
+    canPong: false,
+    isLoading: false,
+    error: null,
+  };
 
-  private subscriptions: Subscription[] = [];
-  private countdownCleanup?: (() => void) | null;
+  public pendingTransactions: SignedTransactionType[] = [];
 
-  constructor(private pingPongService: PingPongService) {}
+  // Lifecycle management
+  private readonly destroy$ = new Subject<void>();
 
-  ngOnInit() {
-    this.pingAmount = this.pingPongService.getPingAmount();
-    this.checkPendingTransactions();
-    this.setSecondsRemaining();
-    this.subscribeToServices();
+  // Dependency injection (modern Angular pattern)
+  private readonly pingPongService = inject(PingPongService);
+
+  ngOnInit(): void {
+    this.initializeComponent();
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
-    if (this.countdownCleanup) {
-      this.countdownCleanup();
-    }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private subscribeToServices() {
-    // Subscribe to ping amount changes
-    const pingAmountSub = this.pingPongService.pingAmount$.subscribe(amount => {
-      this.pingAmount = amount;
-    });
-    this.subscriptions.push(pingAmountSub);
+  private initializeComponent(): void {
+    combineLatest([
+      this.pingPongService.pingAmount$,
+      this.pingPongService.timeToPong$,
+      this.pingPongService.loading$,
+      this.pingPongService.error$,
+    ])
+      .pipe(
+        map(([pingAmount, timeToPong, isLoading, error]) => {
+          const pingPongState = calculatePingPongState(timeToPong);
+          const timeRemaining = formatTimeRemaining(timeToPong || 0);
 
-    // Subscribe to time to pong changes
-    const timeToPongSub = this.pingPongService.timeToPong$.subscribe(
-      timeToPong => {
-        const { canPing, timeRemaining } = setTimeRemaining(timeToPong);
-        this.hasPing = canPing;
-
-        if (timeRemaining !== undefined) {
-          this.secondsLeft = timeRemaining;
-          this.updateTimeRemaining();
-          this.pongAllowed = timeRemaining === 0;
-
-          if (timeRemaining > 0) {
-            this.startCountdown();
-          }
-        } else {
-          // When timeRemaining is undefined (null/undefined case)
-          this.secondsLeft = 0;
-          this.timeRemaining = '00:00';
-          this.pongAllowed = false;
-        }
-      }
-    );
-    this.subscriptions.push(timeToPongSub);
+          return {
+            pingAmount,
+            timeToPong,
+            timeRemaining,
+            canPing: pingPongState.canPing,
+            canPong: pingPongState.canPong,
+            isLoading,
+            error,
+          };
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(viewState => {
+        this.viewState = viewState;
+      });
   }
 
-  private checkPendingTransactions() {
-    const pendingTransactions = this.pingPongService.getPendingTransactions();
-    this.hasPendingTransactions = pendingTransactions.length > 0;
-
-    // Convert to our SignedTransactionType format
-    this.transactions = pendingTransactions.map(tx => ({
-      hash: tx.hash || '',
-      receiver: tx.receiver || '',
-      value: tx.value || '0',
-      gasPrice: tx.gasPrice?.toString() || '0',
-      gasLimit: tx.gasLimit?.toString() || '0',
-      data: tx.data || '',
-    }));
+  formatAmount(amount: string): string {
+    // Convert from wei to EGLD (simple formatting)
+    const amountBN = new BigNumber(amount);
+    const egldAmount = amountBN.dividedBy(new BigNumber(10).pow(18));
+    return egldAmount.toFixed(4) + ' EGLD';
   }
 
-  private async setSecondsRemaining() {
-    const secondsRemaining = await this.pingPongService.getTimeToPong();
-    const { canPing, timeRemaining } = setTimeRemaining(secondsRemaining);
-
-    this.hasPing = canPing;
-
-    if (timeRemaining !== undefined) {
-      this.secondsLeft = timeRemaining;
-      this.updateTimeRemaining();
-      this.pongAllowed = timeRemaining === 0;
-
-      if (timeRemaining > 0) {
-        this.startCountdown();
-      }
-    } else {
-      // When timeRemaining is undefined (null/undefined case)
-      this.secondsLeft = 0;
-      this.timeRemaining = '00:00';
-      this.pongAllowed = false;
-    }
-  }
-
-  private updateTimeRemaining() {
-    this.timeRemaining = formatTimeRemaining(this.secondsLeft);
-  }
-
-  private startCountdown() {
-    if (this.countdownCleanup) {
-      this.countdownCleanup();
-    }
-
-    this.countdownCleanup = getCountdownSeconds({
-      secondsLeft: this.secondsLeft,
-      setSecondsLeft: (seconds: number) => {
-        this.secondsLeft = seconds;
-        this.updateTimeRemaining();
-        this.pongAllowed = seconds === 0;
-      },
-    });
-  }
-
-  async onSendPingTransaction() {
+  async onSendPingTransaction(): Promise<void> {
     try {
-      console.log('Sending ping transaction...');
-      await this.pingPongService.sendPingTransaction(this.pingAmount);
-      this.hasPendingTransactions = true;
-      this.checkPendingTransactions();
+      await this.pingPongService.sendPingTransaction();
+      this.pendingTransactions = this.pingPongService.getPendingTransactions();
     } catch (error) {
       console.error('Error sending ping transaction:', error);
-      this.hasPendingTransactions = false;
     }
   }
 
-  async onSendPongTransaction() {
+  async onSendPongTransaction(): Promise<void> {
     try {
-      console.log('Sending pong transaction...');
       await this.pingPongService.sendPongTransaction();
-      this.hasPendingTransactions = true;
-      this.checkPendingTransactions();
+      this.pendingTransactions = this.pingPongService.getPendingTransactions();
     } catch (error) {
       console.error('Error sending pong transaction:', error);
-      this.hasPendingTransactions = false;
     }
+  }
+
+  clearError(): void {
+    this.pingPongService.clearError();
   }
 }

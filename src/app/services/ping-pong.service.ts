@@ -1,23 +1,57 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, timer, EMPTY, Subject, of } from 'rxjs';
+import {
+  switchMap,
+  map,
+  catchError,
+  takeUntil,
+  shareReplay,
+  distinctUntilChanged,
+} from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 import { contractAddress } from '../../config';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
-import { refreshAccount } from '@multiversx/sdk-dapp/out/utils/account/refreshAccount';
-import { TransactionManager } from '@multiversx/sdk-dapp/out/managers/TransactionManager';
-import { getStore } from '@multiversx/sdk-dapp/out/store/store';
-import { getPendingTransactions } from '@multiversx/sdk-dapp/out/methods/transactions/getPendingTransactions';
-import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
 import { Address, Transaction } from '@multiversx/sdk-core/out';
 import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
+import BigNumber from 'bignumber.js';
+import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
+import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
+import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
+import { TransactionManager } from '@multiversx/sdk-dapp/out/managers/TransactionManager';
+import { SignedTransactionType } from '../components/ping-pong-output/ping-pong-output.component';
+import { getPendingTransactions } from '@multiversx/sdk-dapp/out/methods/transactions/getPendingTransactions';
 
-const PING_TRANSACTION_INFO = {
+export interface PingPongResponseType {
+  data: {
+    data: {
+      returnData: string[];
+    };
+  };
+}
+
+export interface NetworkConfig {
+  network: {
+    apiAddress: string;
+    chainId: string;
+  };
+}
+
+export interface Account {
+  address: string;
+}
+
+export interface TransactionsDisplayInfoType {
+  processingMessage: string;
+  errorMessage: string;
+  successMessage: string;
+}
+
+const PING_TRANSACTION_INFO: TransactionsDisplayInfoType = {
   processingMessage: 'Processing Ping transaction',
   errorMessage: 'An error has occurred during Ping',
   successMessage: 'Ping transaction successful',
 };
 
-const PONG_TRANSACTION_INFO = {
+const PONG_TRANSACTION_INFO: TransactionsDisplayInfoType = {
   processingMessage: 'Processing Pong transaction',
   errorMessage: 'An error has occurred during Pong',
   successMessage: 'Pong transaction successful',
@@ -26,161 +60,253 @@ const PONG_TRANSACTION_INFO = {
 @Injectable({
   providedIn: 'root',
 })
-export class PingPongService {
-  private pingAmountSubject = new BehaviorSubject<string>(
-    '1000000000000000000'
-  ); // 1 EGLD
-  public pingAmount$: Observable<string> =
-    this.pingAmountSubject.asObservable();
+export class PingPongService implements OnDestroy {
+  private readonly destroy$ = new Subject<void>();
 
-  private timeToPongSubject = new BehaviorSubject<number>(0);
-  public timeToPong$: Observable<number> =
-    this.timeToPongSubject.asObservable();
+  // State subjects
+  private readonly pingAmountSubject = new BehaviorSubject<string>('0');
+  private readonly timeToPongSubject = new BehaviorSubject<number | null>(null);
+  private readonly loadingSubject = new BehaviorSubject<boolean>(false);
+  private readonly errorSubject = new BehaviorSubject<string | null>(null);
 
-  private storeUnsubscribe?: () => void;
+  // Public observables
+  public readonly pingAmount$ = this.pingAmountSubject.asObservable();
+  public readonly timeToPong$ = this.timeToPongSubject.asObservable();
+  public readonly loading$ = this.loadingSubject.asObservable();
+  public readonly error$ = this.errorSubject.asObservable();
 
-  constructor() {
-    this.subscribeToStoreChanges();
+  // Auto-refreshing observables
+  public readonly pingAmountRefresh$ = timer(0, 30000).pipe(
+    takeUntil(this.destroy$),
+    switchMap(() => this.fetchPingAmount()),
+    shareReplay(1)
+  );
+
+  public readonly timeToPongRefresh$ = timer(0, 1000).pipe(
+    takeUntil(this.destroy$),
+    switchMap(() => this.fetchTimeToPong()),
+    distinctUntilChanged(),
+    shareReplay(1)
+  );
+
+  constructor(private http: HttpClient) {
+    this.initializeAutoRefresh();
   }
 
-  private subscribeToStoreChanges() {
-    const store = getStore();
-    this.storeUnsubscribe = store.subscribe(() => {
-      // Update time to pong when store changes
-      this.updateTimeToPong();
-    });
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  getPingAmount(): string {
+  // Public getters for immediate values
+  get currentPingAmount(): string {
     return this.pingAmountSubject.value;
   }
 
-  getPendingTransactions() {
-    return getPendingTransactions();
+  get currentTimeToPong(): number | null {
+    return this.timeToPongSubject.value;
   }
 
-  async getTimeToPong(): Promise<number | null> {
+  get isLoading(): boolean {
+    return this.loadingSubject.value;
+  }
+
+  // Private methods
+  private initializeAutoRefresh(): void {
+    this.pingAmountRefresh$.subscribe({
+      next: amount => this.pingAmountSubject.next(amount),
+      error: error => this.handleError('Failed to fetch ping amount', error),
+    });
+
+    this.timeToPongRefresh$.subscribe({
+      next: time => this.timeToPongSubject.next(time),
+      error: error => this.handleError('Failed to fetch time to pong', error),
+    });
+  }
+
+  private fetchPingAmount(): Observable<string> {
+    return this.makeVmQuery('getPingAmount', []).pipe(
+      map(data => this.decodeAmount(data)),
+      catchError(error => {
+        console.error('Unable to call getPingAmount', error);
+        return EMPTY;
+      })
+    );
+  }
+
+  private fetchTimeToPong(): Observable<number | null> {
+    const account = getAccount();
+
     try {
-      await refreshAccount();
-      const account = getAccount();
-      const networkConfig = getNetworkConfig();
-      if (!account.address) {
-        throw new Error('No account address found');
-      }
       const args = new Address(account.address).toHex();
-      const response = await fetch(
-        `${networkConfig.network.apiAddress}/vm-values/query`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            scAddress: contractAddress,
-            funcName: 'getTimeToPong',
-            args: [args],
-          }),
-        }
+
+      return this.makeVmQuery('getTimeToPong', [args]).pipe(
+        map(data => this.decodeTime(data)),
+        catchError(error => {
+          console.error('Unable to call getTimeToPong', error);
+          return of(0);
+        })
       );
-      if (!response.ok) {
-        throw new Error('Failed to query smart contract');
-      }
-      const data = await response.json();
-      // decodeTime logic
-      const returnValue = data?.data?.returnData?.[0];
-      if (returnValue === '') {
-        return 0;
-      }
-      if (!returnValue) {
-        return null;
-      }
-      const decodedHex = Buffer.from(returnValue, 'base64').toString('hex');
-      return parseInt(decodedHex, 16);
     } catch (error) {
+      console.error('Invalid address format', error);
+      return of(0);
+    }
+  }
+
+  private makeVmQuery(
+    funcName: string,
+    args: string[]
+  ): Observable<PingPongResponseType> {
+    const networkConfig = getNetworkConfig();
+
+    const body = {
+      scAddress: contractAddress,
+      funcName,
+      args,
+    };
+
+    return this.http.post<PingPongResponseType>(
+      `${networkConfig.network.apiAddress}/vm-values/query`,
+      body
+    );
+  }
+
+  private decodeAmount(data: PingPongResponseType): string {
+    if (!data.data.data.returnData) {
+      return '0';
+    }
+
+    const returnValue = data.data.data.returnData[0];
+    if (!returnValue) return '0';
+
+    const decodedString = Buffer.from(returnValue, 'base64').toString('hex');
+    return new BigNumber(decodedString, 16).toString(10);
+  }
+
+  private decodeTime(data: PingPongResponseType): number | null {
+    if (!data.data.data.returnData) {
       return null;
     }
-  }
 
-  private async updateTimeToPong() {
-    const timeToPong = await this.getTimeToPong();
-    this.timeToPongSubject.next(timeToPong ?? 0);
-  }
-
-  async sendPingTransaction(amount?: string): Promise<string> {
-    const pingAmount = amount || this.pingAmountSubject.value;
-
-    // Get account data
-    await refreshAccount();
-    const account = getAccount();
-    const networkConfig = getNetworkConfig();
-
-    if (!account.address) {
-      throw new Error('No account address found');
+    const returnValue = data.data.data.returnData[0];
+    if (returnValue === '' || !returnValue) {
+      return 0;
     }
 
-    const transaction = new Transaction({
-      value: BigInt(pingAmount),
-      data: Buffer.from('ping'),
-      receiver: new Address(contractAddress),
-      gasLimit: BigInt(6000000),
-      gasPrice: BigInt(GAS_PRICE),
-      chainID: networkConfig.network.chainId,
-      nonce: BigInt(account.nonce),
-      sender: new Address(account.address),
-      version: 1,
-    });
+    const decodedString = Buffer.from(returnValue, 'base64').toString('hex');
+    return new BigNumber(decodedString, 16).toNumber();
+  }
 
+  private handleError(message: string, error: any): void {
+    console.error(message, error);
+    this.errorSubject.next(message);
+    this.loadingSubject.next(false);
+  }
+
+  // Public methods for manual refresh
+  public refreshPingAmount(): Observable<string> {
+    return this.fetchPingAmount();
+  }
+
+  public refreshTimeToPong(): Observable<number | null> {
+    return this.fetchTimeToPong();
+  }
+
+  // Transaction methods (simplified - in real app would use proper MultiversX services)
+  public async sendPingTransaction(amount?: string): Promise<string> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    try {
+      const pingAmount = amount || this.currentPingAmount;
+      const account = getAccount();
+      const networkConfig = getNetworkConfig();
+
+      const pingTransaction = new Transaction({
+        value: BigInt(pingAmount),
+        data: Buffer.from('ping'),
+        receiver: new Address(contractAddress),
+        gasLimit: BigInt(6000000),
+        gasPrice: BigInt(GAS_PRICE),
+        chainID: networkConfig.network.chainId,
+        sender: new Address(account.address),
+        version: 1,
+      });
+
+      const sessionId = await this.signAndSendTransactions(
+        [pingTransaction],
+        PING_TRANSACTION_INFO
+      );
+
+      this.loadingSubject.next(false);
+      return sessionId;
+    } catch (error) {
+      this.handleError('Failed to send ping transaction', error);
+      throw error;
+    }
+  }
+
+  public async sendPongTransaction(): Promise<string> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    try {
+      const account = getAccount();
+      const networkConfig = getNetworkConfig();
+
+      const pongTransaction = new Transaction({
+        value: BigInt(0),
+        data: Buffer.from('pong'),
+        receiver: new Address(contractAddress),
+        gasLimit: BigInt(6000000),
+        gasPrice: BigInt(GAS_PRICE),
+        chainID: networkConfig.network.chainId,
+        sender: new Address(account.address),
+        version: 1,
+      });
+
+      const sessionId = await this.signAndSendTransactions(
+        [pongTransaction],
+        PONG_TRANSACTION_INFO
+      );
+
+      this.loadingSubject.next(false);
+      return sessionId;
+    } catch (error) {
+      this.handleError('Failed to send pong transaction', error);
+      throw error;
+    }
+  }
+
+  public async signAndSendTransactions(
+    transactions: Transaction[],
+    transactionsDisplayInfo?: TransactionsDisplayInfoType
+  ): Promise<string> {
     const provider = getAccountProvider();
-    const signedTransactions = await provider.signTransactions([transaction]);
+    const txManager = TransactionManager.getInstance();
 
-    const transactionManager = TransactionManager.getInstance();
-    const sentTransactions = await transactionManager.send(signedTransactions);
-
-    const sessionId = await transactionManager.track(sentTransactions, {
-      transactionsDisplayInfo: PING_TRANSACTION_INFO,
+    const signedTransactions = await provider.signTransactions(transactions);
+    const sentTransactions = await txManager.send(signedTransactions);
+    const sessionId = await txManager.track(sentTransactions, {
+      transactionsDisplayInfo,
     });
 
     return sessionId;
   }
 
-  async sendPongTransaction(): Promise<string> {
-    // Get account data
-    await refreshAccount();
-    const account = getAccount();
-    const networkConfig = getNetworkConfig();
+  public getPendingTransactions(): SignedTransactionType[] {
+    const pendingTransactions = getPendingTransactions();
 
-    if (!account.address) {
-      throw new Error('No account address found');
-    }
-
-    const transaction = new Transaction({
-      value: BigInt(0),
-      data: Buffer.from('pong'),
-      receiver: new Address(contractAddress),
-      gasLimit: BigInt(6000000),
-      gasPrice: BigInt(GAS_PRICE),
-      chainID: networkConfig.network.chainId,
-      nonce: BigInt(account.nonce),
-      sender: new Address(account.address),
-      version: 1,
-    });
-
-    const provider = getAccountProvider();
-    const signedTransactions = await provider.signTransactions([transaction]);
-
-    const transactionManager = TransactionManager.getInstance();
-    const sentTransactions = await transactionManager.send(signedTransactions);
-
-    const sessionId = await transactionManager.track(sentTransactions, {
-      transactionsDisplayInfo: PONG_TRANSACTION_INFO,
-    });
-
-    return sessionId;
+    return pendingTransactions.map(tx => ({
+      hash: tx.hash,
+      receiver: tx.receiver,
+      value: tx.value?.toString() || '0',
+      gasPrice: tx.gasPrice?.toString() || '0',
+      gasLimit: tx.gasLimit?.toString() || '0',
+    }));
   }
 
-  ngOnDestroy() {
-    if (this.storeUnsubscribe) {
-      this.storeUnsubscribe();
-    }
+  public clearError(): void {
+    this.errorSubject.next(null);
   }
 }

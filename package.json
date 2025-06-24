@@ -28,6 +28,9 @@
     "@multiversx/sdk-core": "14.2.2",
     "@multiversx/sdk-dapp": "5.0.0-alpha.8",
     "@multiversx/sdk-dapp-ui": "0.0.7",
+    "axios": "^1.10.0",
+    "bignumber.js": "^9.3.0",
+    "moment": "^2.30.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
