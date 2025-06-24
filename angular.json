@@ -32,15 +32,16 @@
             "styles": [
               "src/styles.css"
             ],
-            "define": {
-              "global": "globalThis"
-            },
-            "externalDependencies": [
-              "crypto",
-              "path",
-              "fs",
-              "stream"
-            ]
+            // Uncomment for build to work
+            // "define": {
+            //   "global": "globalThis"
+            // },
+            // "externalDependencies": [
+            //   "crypto",
+            //   "path",
+            //   "fs",
+            //   "stream"
+            // ]
           },
           "configurations": {
             "production": {

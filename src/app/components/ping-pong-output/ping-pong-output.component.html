@@ -1,0 +1,17 @@
+<div>
+  <p>
+    <app-label>Contract Address: </app-label>
+    <span class="text-sm font-mono">{{ contractAddress }}</span>
+  </p>
+
+  <app-transactions-output
+    *ngIf="transactions && transactions.length > 0"
+    [transactions]="transactions"
+  >
+  </app-transactions-output>
+
+  <p *ngIf="!pongAllowed">
+    <app-label>Time remaining: </app-label>
+    <span class="text-red-600">{{ timeRemaining }}</span> until able to pong
+  </p>
+</div>

@@ -10,3 +10,6 @@ export { WidgetComponent } from './widget/widget.component';
 export { OutputContainerComponent } from './output-container/output-container.component';
 export { LabelComponent } from './label/label.component';
 export { FormatAmountComponent } from './format-amount/format-amount.component';
+export { PingPongOutputComponent } from './ping-pong-output/ping-pong-output.component';
+export { TransactionsOutputComponent } from './transactions-output/transactions-output.component';
+export { TransactionOutputComponent } from './transaction-output/transaction-output.component';

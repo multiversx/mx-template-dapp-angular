@@ -3,18 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
-import { LabelComponent } from '../../components/label/label.component';
 import { ButtonComponent } from '../../components/button/button.component';
+import {
+  PingPongOutputComponent,
+  SignedTransactionType,
+} from '../../components/ping-pong-output/ping-pong-output.component';
 import { contractAddress } from '../../../config';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
-import { refreshAccount } from '@multiversx/sdk-dapp/out/utils/account/refreshAccount';
-import { TransactionManager } from '@multiversx/sdk-dapp/out/managers/TransactionManager';
-import { getStore } from '@multiversx/sdk-dapp/out/store/store';
-import { transactionsSliceSelector } from '@multiversx/sdk-dapp/out/store/selectors/transactionsSelector';
-import { getPendingTransactions } from '@multiversx/sdk-dapp/out/methods/transactions/getPendingTransactions';
-import { Address, Transaction } from '@multiversx/sdk-core/out';
-import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
+import { PingPongService } from '../../services/ping-pong.service';
+import {
+  formatTimeRemaining,
+  getCountdownSeconds,
+  setTimeRemaining,
+} from '../../helpers/countdown.helpers';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ping-pong-raw',
@@ -23,8 +24,8 @@ import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
     CommonModule,
     FontAwesomeModule,
     OutputContainerComponent,
-    LabelComponent,
     ButtonComponent,
+    PingPongOutputComponent,
   ],
   templateUrl: './ping-pong-raw.component.html',
   styleUrls: ['./ping-pong-raw.component.css'],
@@ -36,110 +37,126 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   pongAllowed: boolean = false;
   hasPendingTransactions: boolean = false;
   timeRemaining: string = '00:00';
-
-  // Default ping amount (in wei - 1 EGLD = 10^18 wei)
-  private pingAmount: string = '1000000000000000000'; // 1 EGLD
+  transactions: SignedTransactionType[] = [];
+  pingAmount: string = '';
 
   // FontAwesome icons
   faArrowUp = faArrowUp;
   faArrowDown = faArrowDown;
 
-  private storeUnsubscribe?: () => void;
-  private currentSessionId?: string;
-  private countdownInterval?: any;
+  private subscriptions: Subscription[] = [];
+  private countdownCleanup?: (() => void) | null;
+
+  constructor(private pingPongService: PingPongService) {}
 
   ngOnInit() {
-    // Initialize component state
-    this.checkPingPongState();
-    this.subscribeToStoreChanges();
+    this.pingAmount = this.pingPongService.getPingAmount();
     this.checkPendingTransactions();
+    this.setSecondsRemaining();
+    this.subscribeToServices();
   }
 
   ngOnDestroy() {
-    if (this.storeUnsubscribe) {
-      this.storeUnsubscribe();
-    }
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    if (this.countdownCleanup) {
+      this.countdownCleanup();
     }
   }
 
-  private subscribeToStoreChanges() {
-    // Subscribe to store changes to track transaction status
-    const store = getStore();
-    this.storeUnsubscribe = store.subscribe(() => {
-      this.checkPendingTransactions();
-      if (this.currentSessionId) {
-        this.checkTransactionStatus();
-      }
+  private subscribeToServices() {
+    // Subscribe to ping amount changes
+    const pingAmountSub = this.pingPongService.pingAmount$.subscribe(amount => {
+      this.pingAmount = amount;
     });
+    this.subscriptions.push(pingAmountSub);
+
+    // Subscribe to time to pong changes
+    const timeToPongSub = this.pingPongService.timeToPong$.subscribe(
+      timeToPong => {
+        const { canPing, timeRemaining } = setTimeRemaining(timeToPong);
+        this.hasPing = canPing;
+
+        if (timeRemaining !== undefined) {
+          this.secondsLeft = timeRemaining;
+          this.updateTimeRemaining();
+          this.pongAllowed = timeRemaining === 0;
+
+          if (timeRemaining > 0) {
+            this.startCountdown();
+          }
+        } else {
+          // When timeRemaining is undefined (null/undefined case)
+          this.secondsLeft = 0;
+          this.timeRemaining = '00:00';
+          this.pongAllowed = false;
+        }
+      }
+    );
+    this.subscriptions.push(timeToPongSub);
   }
 
   private checkPendingTransactions() {
-    const pendingTransactions = getPendingTransactions();
+    const pendingTransactions = this.pingPongService.getPendingTransactions();
     this.hasPendingTransactions = pendingTransactions.length > 0;
 
-    // Update state when transactions complete
-    if (!this.hasPendingTransactions && this.currentSessionId) {
-      this.updateStateAfterTransaction();
-    }
+    // Convert to our SignedTransactionType format
+    this.transactions = pendingTransactions.map(tx => ({
+      hash: tx.hash || '',
+      receiver: tx.receiver || '',
+      value: tx.value || '0',
+      gasPrice: tx.gasPrice?.toString() || '0',
+      gasLimit: tx.gasLimit?.toString() || '0',
+      data: tx.data || '',
+    }));
   }
 
-  private checkTransactionStatus() {
-    if (!this.currentSessionId) return;
+  private async setSecondsRemaining() {
+    const secondsRemaining = await this.pingPongService.getTimeToPong();
+    const { canPing, timeRemaining } = setTimeRemaining(secondsRemaining);
 
-    const state = transactionsSliceSelector(getStore().getState());
-    const currentSession = state[this.currentSessionId];
+    this.hasPing = canPing;
 
-    if (currentSession) {
-      const sessionStatus = currentSession.status;
+    if (timeRemaining !== undefined) {
+      this.secondsLeft = timeRemaining;
+      this.updateTimeRemaining();
+      this.pongAllowed = timeRemaining === 0;
 
-      if (String(sessionStatus) === 'successful') {
-        this.hasPendingTransactions = false;
-        this.updateStateAfterTransaction();
-        this.currentSessionId = undefined;
-      } else if (
-        String(sessionStatus) === 'failed' ||
-        String(sessionStatus) === 'timedOut'
-      ) {
-        this.hasPendingTransactions = false;
-        this.currentSessionId = undefined;
-        console.error('Transaction failed or timed out');
+      if (timeRemaining > 0) {
+        this.startCountdown();
       }
-    }
-  }
-
-  private updateStateAfterTransaction() {
-    // In a real implementation, you would query the smart contract
-    // to get the actual state. For now, we'll simulate the behavior
-    this.checkPingPongState();
-  }
-
-  private checkPingPongState() {
-    // Mock implementation - in real app, you'd check actual contract state
-    // This simulates the ping-pong logic
-    this.hasPing = true;
-    this.secondsLeft = 30; // 30 seconds until pong is allowed
-    this.pongAllowed = this.secondsLeft === 0;
-    this.updateTimeRemaining();
-
-    if (this.secondsLeft > 0) {
-      this.startCountdown();
+    } else {
+      // When timeRemaining is undefined (null/undefined case)
+      this.secondsLeft = 0;
+      this.timeRemaining = '00:00';
+      this.pongAllowed = false;
     }
   }
 
   private updateTimeRemaining() {
-    const minutes = Math.floor(this.secondsLeft / 60);
-    const seconds = this.secondsLeft % 60;
-    this.timeRemaining = `${minutes.toString().padStart(2, '0')}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
+    this.timeRemaining = formatTimeRemaining(this.secondsLeft);
+  }
+
+  private startCountdown() {
+    if (this.countdownCleanup) {
+      this.countdownCleanup();
+    }
+
+    this.countdownCleanup = getCountdownSeconds({
+      secondsLeft: this.secondsLeft,
+      setSecondsLeft: (seconds: number) => {
+        this.secondsLeft = seconds;
+        this.updateTimeRemaining();
+        this.pongAllowed = seconds === 0;
+      },
+    });
   }
 
   async onSendPingTransaction() {
     try {
       console.log('Sending ping transaction...');
-      await this.sendPingTransaction();
+      await this.pingPongService.sendPingTransaction(this.pingAmount);
+      this.hasPendingTransactions = true;
+      this.checkPendingTransactions();
     } catch (error) {
       console.error('Error sending ping transaction:', error);
       this.hasPendingTransactions = false;
@@ -149,101 +166,12 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   async onSendPongTransaction() {
     try {
       console.log('Sending pong transaction...');
-      await this.sendPongTransaction();
+      await this.pingPongService.sendPongTransaction();
+      this.hasPendingTransactions = true;
+      this.checkPendingTransactions();
     } catch (error) {
       console.error('Error sending pong transaction:', error);
       this.hasPendingTransactions = false;
     }
-  }
-
-  private async sendPingTransaction() {
-    const sessionId = await this.signAndSendTransactions(
-      'ping',
-      this.pingAmount,
-      {
-        processingMessage: 'Processing Ping transaction',
-        errorMessage: 'An error has occurred during Ping',
-        successMessage: 'Ping transaction successful',
-      }
-    );
-
-    this.currentSessionId = sessionId;
-    this.hasPendingTransactions = true;
-  }
-
-  private async sendPongTransaction() {
-    const sessionId = await this.signAndSendTransactions('pong', '0', {
-      processingMessage: 'Processing Pong transaction',
-      errorMessage: 'An error has occurred during Pong',
-      successMessage: 'Pong transaction successful',
-    });
-
-    this.currentSessionId = sessionId;
-    this.hasPendingTransactions = true;
-  }
-
-  private async signAndSendTransactions(
-    functionName: string,
-    amount: string,
-    transactionsDisplayInfo: {
-      processingMessage: string;
-      errorMessage: string;
-      successMessage: string;
-    }
-  ): Promise<string> {
-    // Get account data
-    await refreshAccount(); // Get the latest nonce
-    const account = getAccount();
-
-    if (!account.address) {
-      throw new Error('No account address found');
-    }
-
-    // Get network configuration - for this example, we'll use devnet values
-    const chainId = 'D'; // devnet chain ID
-
-    // Create the transaction with proper gas limits like in the React implementation
-    const transaction = new Transaction({
-      value: BigInt(amount),
-      data: Buffer.from(functionName, 'utf8'),
-      receiver: Address.newFromBech32(this.contractAddress),
-      gasLimit: BigInt(6000000), // Same as React implementation
-      gasPrice: BigInt(GAS_PRICE),
-      chainID: chainId,
-      nonce: BigInt(account.nonce),
-      sender: Address.newFromBech32(account.address),
-      version: 1,
-    });
-
-    // Sign the transaction
-    const provider = getAccountProvider();
-    const signedTransactions = await provider.signTransactions([transaction]);
-
-    // Send and track the transaction
-    const transactionManager = TransactionManager.getInstance();
-    const sentTransactions = await transactionManager.send(signedTransactions);
-
-    // Track the transaction with custom messages
-    const sessionId = await transactionManager.track(sentTransactions, {
-      transactionsDisplayInfo,
-    });
-
-    return sessionId;
-  }
-
-  private startCountdown() {
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
-    }
-
-    this.countdownInterval = setInterval(() => {
-      if (this.secondsLeft > 0) {
-        this.secondsLeft--;
-        this.updateTimeRemaining();
-      } else {
-        this.pongAllowed = true;
-        clearInterval(this.countdownInterval);
-      }
-    }, 1000);
   }
 }

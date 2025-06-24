@@ -7,7 +7,8 @@
         dataTestId="btnPingRaw"
         dataCy="transactionBtn"
       >
-        <fa-icon [icon]="faArrowUp"></fa-icon> Ping
+        <fa-icon [icon]="faArrowUp" class="mr-1"></fa-icon>
+        Ping
       </app-button>
 
       <app-button
@@ -16,24 +17,28 @@
         dataCy="transactionBtn"
         (onClick)="onSendPongTransaction()"
       >
-        <fa-icon [icon]="faArrowDown"></fa-icon> Pong
+        <fa-icon [icon]="faArrowDown" class="mr-1"></fa-icon>
+        Pong
       </app-button>
     </div>
   </div>
 
   <app-output-container>
     <div *ngIf="!hasPendingTransactions">
-      <p>
-        <app-label>Contract Address: </app-label>
-        <span class="text-sm font-mono">{{ contractAddress }}</span>
-      </p>
-      <p *ngIf="!pongAllowed">
-        <app-label>Time remaining: </app-label>
-        <span class="text-red-600">{{ timeRemaining }}</span> until able to pong
-      </p>
+      <app-ping-pong-output
+        [timeRemaining]="timeRemaining"
+        [pongAllowed]="pongAllowed"
+        [transactions]="transactions"
+      >
+      </app-ping-pong-output>
     </div>
-    <div *ngIf="hasPendingTransactions" class="text-center p-4">
-      <p>Processing transaction...</p>
-    </div>
+
+    <app-ping-pong-output
+      *ngIf="hasPendingTransactions"
+      [timeRemaining]="timeRemaining"
+      [pongAllowed]="pongAllowed"
+      [transactions]="transactions"
+    >
+    </app-ping-pong-output>
   </app-output-container>
 </div>
