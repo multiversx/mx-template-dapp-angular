@@ -1,6 +1,7 @@
-# MxTemplateDappAngular
+# @multiversx/template-dapp-angular
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+It's a basic implementation of [@multiversx/sdk-dapp](https://www.npmjs.com/package/@multiversx/sdk-dapp), providing the basics for MultiversX authentication and TX signing.
 
 ## Development server
 
