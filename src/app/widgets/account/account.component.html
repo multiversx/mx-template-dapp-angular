@@ -11,7 +11,12 @@
 
     <p>
       <app-label>Balance: </app-label>
-      <span data-testid="balance">{{ balance }}</span>
+      <app-format-amount
+        [value]="balance"
+        [showLabel]="balance !== '0'"
+        [egldLabel]="label"
+        data-testid="balance"
+      />
     </p>
 
     <p>
