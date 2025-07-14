@@ -288,6 +288,7 @@ export class PingPongService implements OnDestroy {
       value: tx.value?.toString() || '0',
       gasPrice: tx.gasPrice?.toString() || '0',
       gasLimit: tx.gasLimit?.toString() || '0',
+      data: tx.data,
     }));
   }
 

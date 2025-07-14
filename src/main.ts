@@ -11,11 +11,12 @@ async function main() {
     storage: { getStorageCallback: () => sessionStorage },
     dAppConfig: {
       environment: EnvironmentsEnum.devnet,
-      successfulToastLifetime: 5000
-    }
+      transactionTracking: {
+        successfulToastLifetime: 5000,
+      },
+    },
   }).then(() => {
-    bootstrapApplication(App, appConfig)
-    .catch((err) => console.error(err));
+    bootstrapApplication(App, appConfig).catch(err => console.error(err));
   });
 }
 
