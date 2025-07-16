@@ -13,3 +13,4 @@ export { FormatAmountComponent } from './format-amount/format-amount.component';
 export { PingPongOutputComponent } from './ping-pong-output/ping-pong-output.component';
 export { TransactionsOutputComponent } from './transactions-output/transactions-output.component';
 export { TransactionOutputComponent } from './transaction-output/transaction-output.component';
+export { GitHubButtonComponent } from './github-button/github-button.component';

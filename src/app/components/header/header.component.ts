@@ -8,13 +8,21 @@ import { ButtonComponent } from '../button/button.component';
 import { MxLinkComponent } from '../mx-link/mx-link.component';
 import { NotificationsButtonComponent } from '../notifications-button/notifications-button.component';
 import { ConnectButtonComponent } from '../connect-button/connect-button.component';
+import { GitHubButtonComponent } from '../github-button/github-button.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ButtonComponent, MxLinkComponent, NotificationsButtonComponent, ConnectButtonComponent],
+  imports: [
+    CommonModule,
+    ButtonComponent,
+    MxLinkComponent,
+    NotificationsButtonComponent,
+    ConnectButtonComponent,
+    GitHubButtonComponent,
+  ],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent {
   routeNames = RouteNamesEnum;
@@ -37,4 +45,4 @@ export class HeaderComponent {
     await this.authService.logout();
     this.router.navigate([RouteNamesEnum.home]);
   }
-} 
+}
