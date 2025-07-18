@@ -14,6 +14,7 @@
       </div>
 
       <ng-container *ngIf="isLoggedIn">
+        <app-github-button></app-github-button>
         <app-notifications-button></app-notifications-button>
         <app-button
           (onClick)="handleLogout()"
