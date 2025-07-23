@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { GITHUB_REPO_URL } from '../../../constants';
-
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { GITHUB_REPO_URL } from '../../../config';
 
 @Component({
   selector: 'app-github-button',
