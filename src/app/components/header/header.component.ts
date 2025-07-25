@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
-import { EnvironmentService } from '../../services/environment.service';
 import { RouteNamesEnum } from '../../route-names.enum';
 import { ButtonComponent } from '../button/button.component';
 import { MxLinkComponent } from '../mx-link/mx-link.component';
 import { NotificationsButtonComponent } from '../notifications-button/notifications-button.component';
 import { ConnectButtonComponent } from '../connect-button/connect-button.component';
 import { GitHubButtonComponent } from '../github-button/github-button.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -29,16 +29,16 @@ export class HeaderComponent {
 
   constructor(
     private authService: AuthService,
-    private environmentService: EnvironmentService,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) {
+  }
 
   get isLoggedIn(): boolean {
     return this.authService.getIsLoggedIn();
   }
 
   get environment(): string {
-    return this.environmentService.environment;
+    return environment.dAppConfig.environment;
   }
 
   async handleLogout() {

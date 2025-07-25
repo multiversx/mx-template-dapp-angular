@@ -1,20 +1,15 @@
 import './polyfills';
 import { initApp } from '@multiversx/sdk-dapp/out/methods/initApp/initApp';
-import { EnvironmentsEnum } from '@multiversx/sdk-dapp/out/types/enums.types';
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { environment } from './environments/environment';
 
 async function main() {
   initApp({
     storage: { getStorageCallback: () => sessionStorage },
-    dAppConfig: {
-      environment: EnvironmentsEnum.devnet,
-      transactionTracking: {
-        successfulToastLifetime: 5000,
-      },
-    },
+    dAppConfig: environment.dAppConfig,
   }).then(() => {
     bootstrapApplication(App, appConfig).catch(err => console.error(err));
   });
