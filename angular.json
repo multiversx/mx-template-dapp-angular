@@ -57,7 +57,34 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "testnet": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2MB",
+                  "maximumError": "3MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testnet.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -77,6 +104,9 @@
           "configurations": {
             "production": {
               "buildTarget": "mx-template-dapp-angular:build:production"
+            },
+            "testnet": {
+              "buildTarget": "mx-template-dapp-angular:build:testnet"
             },
             "development": {
               "buildTarget": "mx-template-dapp-angular:build:development"

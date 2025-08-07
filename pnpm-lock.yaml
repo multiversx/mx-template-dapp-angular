@@ -29,18 +29,24 @@ importers:
       '@fortawesome/angular-fontawesome':
         specifier: ^2.0.1
         version: 2.0.1(@angular/core@20.0.4(@angular/compiler@20.0.4)(rxjs@7.8.2)(zone.js@0.15.1))
+      '@fortawesome/free-brands-svg-icons':
+        specifier: ^6.7.2
+        version: 6.7.2
       '@fortawesome/free-solid-svg-icons':
         specifier: ^6.7.2
         version: 6.7.2
       '@multiversx/sdk-core':
-        specifier: 14.2.2
-        version: 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+        specifier: 14.2.6
+        version: 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
       '@multiversx/sdk-dapp':
-        specifier: 5.0.0-alpha.8
-        version: 5.0.0-alpha.8(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))(@stencil/core@4.35.1)(@types/react@19.1.8)(axios@1.10.0)(bignumber.js@9.3.0)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)
+        specifier: ^5.x
+        version: 5.0.13(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))(@stencil/core@4.35.1)(@types/react@19.1.8)(axios@1.10.0)(bignumber.js@9.3.0)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(rollup@4.44.0)(typescript@5.8.3)
       '@multiversx/sdk-dapp-ui':
-        specifier: 0.0.7
-        version: 0.0.7(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
+        specifier: ^0.x
+        version: 0.0.7(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
+      '@multiversx/sdk-dapp-utils':
+        specifier: ^2.x
+        version: 2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -339,6 +345,9 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
+  '@emotion/unitless@0.10.0':
+    resolution: {integrity: sha512-dFoMUuQA20zvtVTuxZww6OHoJYgrzfKM1t52mVySDJnMSEa08ruEvdYQbhvyu6soU+NeLVd3yKfTfT0NeV6qGg==}
+
   '@esbuild/aix-ppc64@0.25.5':
     resolution: {integrity: sha512-9o3TMmpmftaCMepOdA5k/yDw8SfInyzWWTjYTFCX3kPSDJMROQTb8jg+h9Cnwnmm1vOzvxN7gIfB5V2ewpjtGA==}
     engines: {node: '>=18'}
@@ -516,6 +525,10 @@ packages:
 
   '@fortawesome/fontawesome-svg-core@6.7.2':
     resolution: {integrity: sha512-yxtOBWDrdi5DD5o1pmVdq3WMCvnobT0LU6R8RyyVXPvFRd2o79/0NCuQoCjNTeZz9EzA9xS3JxNWfv54RIHFEA==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/free-brands-svg-icons@6.7.2':
+    resolution: {integrity: sha512-zu0evbcRTgjKfrr77/2XX+bU+kuGfjm0LbajJHVIgBWNIDzrhpRxiCPNT8DW5AdmSsq7Mcf9D1bH0aSeSUSM+Q==}
     engines: {node: '>=6'}
 
   '@fortawesome/free-solid-svg-icons@6.7.2':
@@ -848,11 +861,14 @@ packages:
     resolution: {integrity: sha512-c0tIdQUnbBLSt6NYU+OpeGPYdL0+GV547HeHT8Xc0BKQ7Cj0v82QUoA2QRtWrR1G4MNZmLsIacZSsf6DrIS2Bw==}
     engines: {node: '>=8.9.0'}
 
-  '@multiversx/sdk-core@14.2.2':
-    resolution: {integrity: sha512-/iAZgjRAaXg+nvOwhvoTZ9oRq81c73AUWIFlXOK4PPHf6mfAHGU84Cn8iKJdzNEIwnoYeK42kLhY2rHmxfoO6Q==}
+  '@multiversx/sdk-core@14.2.6':
+    resolution: {integrity: sha512-dATWBOpCf1hK/OQpewWTsyAY7wfIZDQd9oQYT46R1UjK+60Uad+evB/EZGHd8tsBw/e9+hUKyQYJjQr9t4jxfQ==}
     peerDependencies:
       bignumber.js: ^9.0.1
       protobufjs: ^7.2.6
+
+  '@multiversx/sdk-dapp-ui@0.0.23':
+    resolution: {integrity: sha512-hewc8gf+7MzEqIbwvTQKp52gCdLN9DtV1Esm77M/Yp9FlN69zCr8CYtusSiP3swJ/rkfG8KC0E8MWpzQvRcoQw==}
 
   '@multiversx/sdk-dapp-ui@0.0.7':
     resolution: {integrity: sha512-5bTTY62JYvb9Zo0Z/WBl6ZxMjzvm4lF9K0Ntq9IAG8a0E9nDs7zcWc2gOB8vXYvHN0CL6WINXIqNT1da9KtzBw==}
@@ -862,13 +878,13 @@ packages:
     peerDependencies:
       '@multiversx/sdk-core': '>= 14.0.1'
 
-  '@multiversx/sdk-dapp@5.0.0-alpha.8':
-    resolution: {integrity: sha512-h8kSqBBl43Lc9QGh2UHFXthJLyzSxYoxpRRxTvFUgc+NA6FI3RR4sOiphY1yYX2Ex3Bmh3KjNwfyvwrPJM8ulg==}
+  '@multiversx/sdk-dapp@5.0.13':
+    resolution: {integrity: sha512-PJm3+D3MGAHINzI68aWPDAIc0UEQsJ6h8CjOUUyIBAbso9Wvho4f5lRtnWeXSBjTgz8ov0TZQ4usSXWLzwGmFw==}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
       '@multiversx/sdk-dapp-utils': ^2.x
-      axios: '>=1.7.4'
-      bignumber.js: 9.x
+      axios: '>=1.10.0'
+      bignumber.js: ^9.x
 
   '@multiversx/sdk-extension-provider@5.0.0':
     resolution: {integrity: sha512-n/TVLqaeDYXVr4vXsNtR5ckxTz5n8VaDUcG6WL004+Y3WXRUwo32czzlpIoowt38pT60IDNjVo8echPbVJHytQ==}
@@ -885,28 +901,30 @@ packages:
     peerDependencies:
       '@multiversx/sdk-core': '>= 14.0.1'
 
-  '@multiversx/sdk-native-auth-client@1.0.9':
-    resolution: {integrity: sha512-q1/cDRKz7QQsr8lQskUsfGkqJbIut772/MBX52Td4OTGg/G1HAm2xsELe+06y7L537A2rqz5/W9KkJ5yWt968g==}
+  '@multiversx/sdk-native-auth-client@2.0.1':
+    resolution: {integrity: sha512-J4RxpsfNnWBKOPz0vvhnReSf8V6mci11Pe3NT2awhrpBhtAvkSBUGIzgoGVf/eumrhyReRmKyMjo+u4UhGokbg==}
+    peerDependencies:
+      axios: ^1.10.0
 
   '@multiversx/sdk-transaction-decoder@1.0.2':
     resolution: {integrity: sha512-j43QsKquu8N51WLmVlJ7dV2P3A1448R7/ktvl8r3i6wRMpfdtzDPNofTdHmMRT7DdQdvs4+RNgz8hVKL11Etsw==}
 
-  '@multiversx/sdk-wallet-connect-provider@6.0.1':
-    resolution: {integrity: sha512-D0Ide3sN6LtLCM9KICnxV5og0M+1QGRCRPzadfggVC5DQCREro4CVBmChQy79WcnKx275xNUExyFEW64r5PLhg==}
+  '@multiversx/sdk-wallet-connect-provider@6.0.2':
+    resolution: {integrity: sha512-ap0tIwKWXesdYiJR4Xo9veNb6Idd47EbOV5VqPjc2ipnfPgTwQETxDW3ackTkxxR7M2MjXjv8JQ824+Bx8Ej1g==}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
 
   '@multiversx/sdk-wallet@4.6.0':
     resolution: {integrity: sha512-SxO/hBTnAB+uWH4MJdwKLvfRk8cxdA8zi6JC4I9j1+V+XQJpfs2YHCvMmaVyIAqjmSg9i7Uk61exrDkR3bjPAw==}
 
-  '@multiversx/sdk-web-wallet-cross-window-provider@3.1.0':
-    resolution: {integrity: sha512-O3FCpRal99Bxf9ESmGB+FD6D5AcIf6Kjo3A2FTwdyhCYu3m2lRtwoFsd+uXSo7FXoMWrlZJaQsdO8GYOo/HQhQ==}
+  '@multiversx/sdk-web-wallet-cross-window-provider@3.1.3':
+    resolution: {integrity: sha512-GcK7dPMBuP2YtThAtGVRJ3n6n6KvVAGhegFT7JM8yAE8Y7lwU0Aq0Bvop0ElJIwdXAAOJi0Q0KPGPdHM2BuuJA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
 
-  '@multiversx/sdk-web-wallet-iframe-provider@3.0.1':
-    resolution: {integrity: sha512-fXqkWPhuEiyg57JzZjgkktzRfL/pQ/7fM4wuIN8dIYUngfwEwa0uqpJy5DU90Pcqm0S2gf8whPmAeSZ7K8H5aQ==}
+  '@multiversx/sdk-web-wallet-iframe-provider@3.0.3':
+    resolution: {integrity: sha512-lxIFSoutQJD3fIxW/YpEW4/7U6VUoHjVSeOlwgQJr/MmkuURJKpWezPForvPur17tYsxTHmnwWOdD5Ja8OEAtA==}
     engines: {node: '>=18'}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
@@ -917,8 +935,8 @@ packages:
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
 
-  '@multiversx/sdk-webview-provider@3.0.1':
-    resolution: {integrity: sha512-Bw4h8lR3p6a8TdU0tCs0LmBYFxCfVzOkEL0kMtMOBxna/6DGTnvpuOmB33LeVPluHUw5jLlFHNCClQst916vuA==}
+  '@multiversx/sdk-webview-provider@3.1.3':
+    resolution: {integrity: sha512-9FbeVs3BgK+vwXcwcC6L7EEaosq8ftHbgQqzRyX+npFRjmJgY3P/tB4biJK5Y1iI6zFbYmGvNq2RklHY6+M8ow==}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x
       '@multiversx/sdk-web-wallet-cross-window-provider': ^3.x
@@ -1225,6 +1243,24 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
+  '@rollup/plugin-image@3.0.3':
+    resolution: {integrity: sha512-qXWQwsXpvD4trSb8PeFPFajp8JLpRtqqOeNYRUKnEQNHm7e5UP7fuSRcbjQAJ7wDZBbnJvSdY5ujNBQd9B1iFg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+
+  '@rollup/pluginutils@5.2.0':
+    resolution: {integrity: sha512-qWJ2ZTbmumwiLFomfzTyt5Kng4hwPi9rwCYN4SHb6eaRU1KNO4ccxINHr/VhH4GgPlt1XfSTLX2LBTme8ne4Zw==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+
   '@rollup/rollup-android-arm-eabi@4.40.2':
     resolution: {integrity: sha512-JkdNEq+DFxZfUwxvB58tHMHBHVgX23ew41g1OQinthJ+ryhdRk67O31S7sYw8u2lTjHUPFxwar07BBt1KHp/hg==}
     cpu: [arm]
@@ -1529,6 +1565,13 @@ packages:
       react: ^18 || ^19
       react-dom: ^18 || ^19
 
+  '@stencil/react-output-target@1.2.0':
+    resolution: {integrity: sha512-xDNpWdRg897T3Diy5V2d8dZUdjhc4QJ/5JZdTVyv3/e9UICdJPfCY6eKp/dWWgYlJ9AUE6GLHOI1iePZmLY12A==}
+    peerDependencies:
+      '@stencil/core': '>=3 || >= 4.0.0-beta.0 || >= 4.0.0'
+      react: ^18 || ^19
+      react-dom: ^18 || ^19
+
   '@ts-morph/common@0.23.0':
     resolution: {integrity: sha512-m7Lllj9n/S6sOkCkRftpM7L24uvmfXQFedlW/4hENcuJH1HHm9u5EgxZb9uVjQSCGrbBWBkOGgcTxNg36r6ywA==}
 
@@ -1600,8 +1643,8 @@ packages:
     peerDependencies:
       vite: ^6.0.0
 
-  '@walletconnect/core@2.19.1':
-    resolution: {integrity: sha512-rMvpZS0tQXR/ivzOxN1GkHvw3jRRMlI/jRX5g7ZteLgg2L0ZcANsFvAU5IxILxIKcIkTCloF9TcfloKVbK3qmw==}
+  '@walletconnect/core@2.20.2':
+    resolution: {integrity: sha512-48XnarxQQrpJ0KZJOjit56DxuzfVRYUdL8XVMvUh/ZNUiX2FB5w6YuljUUeTLfYOf04Et6qhVGEUkmX3W+9/8w==}
     engines: {node: '>=18'}
 
   '@walletconnect/environment@1.0.1':
@@ -1645,17 +1688,17 @@ packages:
   '@walletconnect/safe-json@1.0.2':
     resolution: {integrity: sha512-Ogb7I27kZ3LPC3ibn8ldyUr5544t3/STow9+lzz7Sfo808YD7SBWk7SAsdBFlYgP2zDRy2hS3sKRcuSRM0OTmA==}
 
-  '@walletconnect/sign-client@2.19.1':
-    resolution: {integrity: sha512-OgBHRPo423S02ceN3lAzcZ3MYb1XuLyTTkKqLmKp/icYZCyRzm3/ynqJDKndiBLJ5LTic0y07LiZilnliYqlvw==}
+  '@walletconnect/sign-client@2.20.2':
+    resolution: {integrity: sha512-KyeDToypZ1OjCbij4Jx0cAg46bMwZ6zCKt0HzCkqENcex3Zchs7xBp9r8GtfEMGw+PUnXwqrhzmLBH0x/43oIQ==}
 
   '@walletconnect/time@1.0.2':
     resolution: {integrity: sha512-uzdd9woDcJ1AaBZRhqy5rNC9laqWGErfc4dxA9a87mPdKOgWMD85mcFo9dIYIts/Jwocfwn07EC6EzclKubk/g==}
 
-  '@walletconnect/types@2.19.1':
-    resolution: {integrity: sha512-XWWGLioddH7MjxhyGhylL7VVariVON2XatJq/hy0kSGJ1hdp31z194nHN5ly9M495J9Hw8lcYjGXpsgeKvgxzw==}
+  '@walletconnect/types@2.20.2':
+    resolution: {integrity: sha512-XPPbJM/mGU05i6jUxhC3yI/YvhSF6TYJQ5SXTWM53lVe6hs6ukvlEhPctu9ZBTGwGFhwPXIjtK/eWx+v4WY5iw==}
 
-  '@walletconnect/utils@2.19.1':
-    resolution: {integrity: sha512-aOwcg+Hpph8niJSXLqkU25pmLR49B8ECXp5gFQDW5IeVgXHoOoK7w8a79GBhIBheMLlIt1322sTKQ7Rq5KzzFg==}
+  '@walletconnect/utils@2.20.2':
+    resolution: {integrity: sha512-2uRUDvpYSIJFYcr1WIuiFy6CEszLF030o6W8aDMkGk9/MfAZYEJQHMJcjWyaNMPHLJT0POR5lPaqkYOpuyPIQQ==}
 
   '@walletconnect/window-getters@1.0.1':
     resolution: {integrity: sha512-vHp+HqzGxORPAN8gY03qnbTMnhqIwjeRJNOMOAzePRg4xVEEE2WvYsI9G2NMjOknA8hnuYbU3/hwLcKbjhc8+Q==}
@@ -1801,9 +1844,6 @@ packages:
   blake2b@2.1.3:
     resolution: {integrity: sha512-pkDss4xFVbMb4270aCyGD3qLv92314Et+FsKzilCLxDz5DuZ2/1g3w4nmBbu6nKApPspnjG7JcwTjGZnduB1yg==}
 
-  bn.js@4.12.2:
-    resolution: {integrity: sha512-n4DSx829VRTRByMRGdjQ9iqsN0Bh4OolPsFnaZBLcbi8iXcB+kJ9s7EnRt4wILZNV3kPLHkRVfOc/HvhC3ovDw==}
-
   body-parser@1.20.3:
     resolution: {integrity: sha512-7rAxByjUMqQ3/bHJy7D6OGXvx/MMc4IqBn/X0fcM1QUcAItpZrBEYhWGem+tzXH90c+G01ypMcYJBO9Y30203g==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
@@ -1820,9 +1860,6 @@ packages:
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
-
-  brorand@1.1.0:
-    resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
 
   browserslist@4.25.0:
     resolution: {integrity: sha512-PJ8gYKeS5e/whHBh8xrwYK+dAvEj7JXtz6uTucnMRB8OiGTsKccFekoRrjajPBHV8oOY+2tI4uxeceSimKwMFA==}
@@ -2157,9 +2194,6 @@ packages:
   electron-to-chromium@1.5.172:
     resolution: {integrity: sha512-fnKW9dGgmBfsebbYognQSv0CGGLFH1a5iV9EDYTBwmAQn+whbzHbLFlC+3XbHc8xaNtpO0etm8LOcRXs1qMRkQ==}
 
-  elliptic@6.6.1:
-    resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
-
   emoji-regex@10.4.0:
     resolution: {integrity: sha512-EC+0oUMY1Rqm4O6LLrgjtYDvcVYTy7chDnM4Q7030tP4Kwj3u/pR6gP9ygnp2CJMK5Gq+9Q2oqmrFJAz01DXjw==}
 
@@ -2250,6 +2284,9 @@ packages:
 
   estree-walker@0.6.1:
     resolution: {integrity: sha512-SqmZANLWS0mnatqbSfRP5g8OXZC12Fgg1IwNtLsyHDzJizORW4khDfjPqJZsemPWBB2uqykUah5YpQ6epsqC/w==}
+
+  estree-walker@2.0.2:
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
   ethereum-cryptography@2.2.1:
     resolution: {integrity: sha512-r/W8lkHSiTLxUxW8Rf3u4HGB0xQweG2RyETjywylKZSzLWoWAijRz8WCuOtJ6wah+avllXBqZuk29HCCvhEIRg==}
@@ -2451,15 +2488,9 @@ packages:
     resolution: {integrity: sha512-1nmYp/rhMDiE7AYkDw+lLwlAzz0AntGIe51F3RfFfEqyQ3feY2eI/NcwC6umIQVOASPMsWJLJScWKSSvzL9IVA==}
     engines: {node: '>=4'}
 
-  hash.js@1.1.7:
-    resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
-
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
-
-  hmac-drbg@1.0.1:
-    resolution: {integrity: sha512-Tti3gMqLdZfhOQY1Mzf/AanLiqh1WTiJgEj26ZuYQ9fbkLomzGchCws4FyrSd4VkpBfiNhaE1On+lOz894jvXg==}
 
   hosted-git-info@8.1.0:
     resolution: {integrity: sha512-Rw/B2DNQaPBICNXEm8balFz9a6WpZrkCGpcWFpy7nCj+NyhSdqXipmfvtmWt9xGfp0wZnBxB+iVpLmQMYt47Tw==}
@@ -2891,11 +2922,9 @@ packages:
     resolution: {integrity: sha512-VP79XUPxV2CigYP3jWwAUFSku2aKqBH7uTAapFWCBqutsbmDo96KY5o8uh6U+/YSIn5OxJnXp73beVkpqMIGhA==}
     engines: {node: '>=18'}
 
-  minimalistic-assert@1.0.1:
-    resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
-
-  minimalistic-crypto-utils@1.0.1:
-    resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
+  mini-svg-data-uri@1.4.4:
+    resolution: {integrity: sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==}
+    hasBin: true
 
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -3377,6 +3406,10 @@ packages:
 
   react-property@2.0.2:
     resolution: {integrity: sha512-+PbtI3VuDV0l6CleQMsx2gtK0JZbZKbpdu5ynr+lbsuvtmgbNcS3VM0tuY2QjFNOcWxvXeHjDpy42RO+4U2rug==}
+
+  react-style-stringify@1.2.0:
+    resolution: {integrity: sha512-88JZckqgbfXJaGcDQoTFKRmBwHBF0Ddaxz3PL9Q+vywAJruBY+NdN+ZiKSBe7r/pWtjbt0naZdtH5oNI1X3FLA==}
+    engines: {node: '>=14.0.0'}
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -4577,6 +4610,9 @@ snapshots:
 
   '@colors/colors@1.5.0': {}
 
+  '@emotion/unitless@0.10.0':
+    optional: true
+
   '@esbuild/aix-ppc64@0.25.5':
     optional: true
 
@@ -4681,6 +4717,10 @@ snapshots:
   '@fortawesome/fontawesome-common-types@6.7.2': {}
 
   '@fortawesome/fontawesome-svg-core@6.7.2':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 6.7.2
+
+  '@fortawesome/free-brands-svg-icons@6.7.2':
     dependencies:
       '@fortawesome/fontawesome-common-types': 6.7.2
 
@@ -4866,7 +4906,7 @@ snapshots:
 
   '@ledgerhq/devices@8.0.3':
     dependencies:
-      '@ledgerhq/errors': 6.12.6
+      '@ledgerhq/errors': 6.22.0
       '@ledgerhq/logs': 6.13.0
       rxjs: 6.6.7
       semver: 7.7.2
@@ -5051,7 +5091,7 @@ snapshots:
 
   '@multiversx/sdk-bls-wasm@0.3.5': {}
 
-  '@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)':
+  '@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)':
     dependencies:
       '@multiversx/sdk-transaction-decoder': 1.0.2
       '@noble/ed25519': 1.7.3
@@ -5075,11 +5115,30 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@multiversx/sdk-dapp-ui@0.0.7(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)':
+  '@multiversx/sdk-dapp-ui@0.0.23(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(rollup@4.44.0)':
     dependencies:
       '@fortawesome/fontawesome-svg-core': 6.7.2
       '@fortawesome/free-solid-svg-icons': 6.7.2
-      '@multiversx/sdk-dapp-utils': 2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@rollup/plugin-image': 3.0.3(rollup@4.44.0)
+      '@stencil/react-output-target': 1.2.0(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
+      classnames: 2.5.1
+      lodash.inrange: 3.3.6
+      lodash.range: 3.2.0
+      qrcode: 1.5.4
+      sass-embedded: 1.89.2
+    transitivePeerDependencies:
+      - '@stencil/core'
+      - '@types/react'
+      - react
+      - react-dom
+      - rollup
+    optional: true
+
+  '@multiversx/sdk-dapp-ui@0.0.7(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@fortawesome/fontawesome-svg-core': 6.7.2
+      '@fortawesome/free-solid-svg-icons': 6.7.2
+      '@multiversx/sdk-dapp-utils': 2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
       '@stencil/react-output-target': 0.8.2(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
       classnames: 2.5.1
       lodash.inrange: 3.3.6
@@ -5093,25 +5152,25 @@ snapshots:
       - react
       - react-dom
 
-  '@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
 
-  '@multiversx/sdk-dapp@5.0.0-alpha.8(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))(@stencil/core@4.35.1)(@types/react@19.1.8)(axios@1.10.0)(bignumber.js@9.3.0)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)':
+  '@multiversx/sdk-dapp@5.0.13(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))(@stencil/core@4.35.1)(@types/react@19.1.8)(axios@1.10.0)(bignumber.js@9.3.0)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(rollup@4.44.0)(typescript@5.8.3)':
     dependencies:
       '@lifeomic/axios-fetch': 3.0.1
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
-      '@multiversx/sdk-dapp-utils': 2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-extension-provider': 5.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-hw-provider': 8.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-metamask-provider': 2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-native-auth-client': 1.0.9
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-dapp-utils': 2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-extension-provider': 5.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-hw-provider': 8.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-metamask-provider': 2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-native-auth-client': 2.0.1(axios@1.10.0)
       '@multiversx/sdk-wallet': 4.6.0
-      '@multiversx/sdk-wallet-connect-provider': 6.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(typescript@5.8.3)
-      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-web-wallet-iframe-provider': 3.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))
-      '@multiversx/sdk-web-wallet-provider': 5.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
-      '@multiversx/sdk-webview-provider': 3.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))
+      '@multiversx/sdk-wallet-connect-provider': 6.0.2(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(typescript@5.8.3)
+      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-web-wallet-iframe-provider': 3.0.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))
+      '@multiversx/sdk-web-wallet-provider': 5.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-webview-provider': 3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))
       axios: 1.10.0
       bignumber.js: 9.3.0
       immer: 10.1.1
@@ -5126,7 +5185,7 @@ snapshots:
       socket.io-client: 4.7.5
       zustand: 4.4.7(@types/react@19.1.8)(immer@10.1.1)(react@18.3.1)
     optionalDependencies:
-      '@multiversx/sdk-dapp-ui': 0.0.7(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)
+      '@multiversx/sdk-dapp-ui': 0.0.23(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)(rollup@4.44.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -5147,21 +5206,21 @@ snapshots:
       - aws4fetch
       - bufferutil
       - db0
-      - debug
       - ioredis
       - react
       - react-dom
+      - rollup
       - supports-color
       - typescript
       - uploadthing
       - utf-8-validate
       - zod
 
-  '@multiversx/sdk-extension-provider@5.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-extension-provider@5.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
 
-  '@multiversx/sdk-hw-provider@8.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-hw-provider@8.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
       '@ledgerhq/devices': 8.0.3
       '@ledgerhq/errors': 6.12.6
@@ -5169,33 +5228,31 @@ snapshots:
       '@ledgerhq/hw-transport-web-ble': 6.28.6
       '@ledgerhq/hw-transport-webhid': 6.28.6
       '@ledgerhq/hw-transport-webusb': 6.28.6
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
       buffer: 6.0.3
       platform: 1.3.6
 
-  '@multiversx/sdk-metamask-provider@2.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-metamask-provider@2.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
       '@metamask/providers': 16.0.0
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
       protobufjs: 7.4.0
     transitivePeerDependencies:
       - supports-color
 
-  '@multiversx/sdk-native-auth-client@1.0.9':
+  '@multiversx/sdk-native-auth-client@2.0.1(axios@1.10.0)':
     dependencies:
       axios: 1.10.0
-    transitivePeerDependencies:
-      - debug
 
   '@multiversx/sdk-transaction-decoder@1.0.2':
     dependencies:
       bech32: 2.0.0
 
-  '@multiversx/sdk-wallet-connect-provider@6.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(typescript@5.8.3)':
+  '@multiversx/sdk-wallet-connect-provider@6.0.2(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(typescript@5.8.3)':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
-      '@walletconnect/sign-client': 2.19.1(typescript@5.8.3)
-      '@walletconnect/utils': 2.19.1(typescript@5.8.3)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@walletconnect/sign-client': 2.20.2(typescript@5.8.3)
+      '@walletconnect/utils': 2.20.2(typescript@5.8.3)
       bech32: 1.1.4
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -5236,28 +5293,28 @@ snapshots:
       tweetnacl: 1.0.3
       uuid: 8.3.2
 
-  '@multiversx/sdk-web-wallet-cross-window-provider@3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-web-wallet-cross-window-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
       qs: 6.11.2
 
-  '@multiversx/sdk-web-wallet-iframe-provider@3.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))':
+  '@multiversx/sdk-web-wallet-iframe-provider@3.0.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
-      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
       '@types/jest': 29.5.14
       '@types/qs': 6.9.10
       qs: 6.11.2
 
-  '@multiversx/sdk-web-wallet-provider@5.0.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))':
+  '@multiversx/sdk-web-wallet-provider@5.0.0(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
       qs: 6.10.3
 
-  '@multiversx/sdk-webview-provider@3.0.1(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)))':
+  '@multiversx/sdk-webview-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))(@multiversx/sdk-web-wallet-cross-window-provider@3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)))':
     dependencies:
-      '@multiversx/sdk-core': 14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0)
-      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.0(@multiversx/sdk-core@14.2.2(bignumber.js@9.3.0)(protobufjs@7.4.0))
+      '@multiversx/sdk-core': 14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0)
+      '@multiversx/sdk-web-wallet-cross-window-provider': 3.1.3(@multiversx/sdk-core@14.2.6(bignumber.js@9.3.0)(protobufjs@7.4.0))
 
   '@napi-rs/nice-android-arm-eabi@1.0.1':
     optional: true
@@ -5511,6 +5568,23 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
+  '@rollup/plugin-image@3.0.3(rollup@4.44.0)':
+    dependencies:
+      '@rollup/pluginutils': 5.2.0(rollup@4.44.0)
+      mini-svg-data-uri: 1.4.4
+    optionalDependencies:
+      rollup: 4.44.0
+    optional: true
+
+  '@rollup/pluginutils@5.2.0(rollup@4.44.0)':
+    dependencies:
+      '@types/estree': 1.0.8
+      estree-walker: 2.0.2
+      picomatch: 4.0.2
+    optionalDependencies:
+      rollup: 4.44.0
+    optional: true
+
   '@rollup/rollup-android-arm-eabi@4.40.2':
     optional: true
 
@@ -5748,6 +5822,19 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  '@stencil/react-output-target@1.2.0(@stencil/core@4.35.1)(@types/react@19.1.8)(react-dom@19.1.0(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@lit/react': 1.0.7(@types/react@19.1.8)
+      '@stencil/core': 4.35.1
+      html-react-parser: 5.2.5(@types/react@19.1.8)(react@18.3.1)
+      react: 18.3.1
+      react-dom: 19.1.0(react@18.3.1)
+      react-style-stringify: 1.2.0
+      ts-morph: 22.0.0
+    transitivePeerDependencies:
+      - '@types/react'
+    optional: true
+
   '@ts-morph/common@0.23.0':
     dependencies:
       fast-glob: 3.3.3
@@ -5822,7 +5909,7 @@ snapshots:
     dependencies:
       vite: 6.3.5(@types/node@24.0.3)(jiti@1.21.7)(sass-embedded@1.89.2)(sass@1.88.0)(yaml@2.8.0)
 
-  '@walletconnect/core@2.19.1(typescript@5.8.3)':
+  '@walletconnect/core@2.20.2(typescript@5.8.3)':
     dependencies:
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-provider': 1.0.14
@@ -5835,8 +5922,8 @@ snapshots:
       '@walletconnect/relay-auth': 1.1.0
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.19.1
-      '@walletconnect/utils': 2.19.1(typescript@5.8.3)
+      '@walletconnect/types': 2.20.2
+      '@walletconnect/utils': 2.20.2(typescript@5.8.3)
       '@walletconnect/window-getters': 1.0.1
       es-toolkit: 1.33.0
       events: 3.3.0
@@ -5952,16 +6039,16 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/sign-client@2.19.1(typescript@5.8.3)':
+  '@walletconnect/sign-client@2.20.2(typescript@5.8.3)':
     dependencies:
-      '@walletconnect/core': 2.19.1(typescript@5.8.3)
+      '@walletconnect/core': 2.20.2(typescript@5.8.3)
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
       '@walletconnect/jsonrpc-utils': 1.0.8
       '@walletconnect/logger': 2.1.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.19.1
-      '@walletconnect/utils': 2.19.1(typescript@5.8.3)
+      '@walletconnect/types': 2.20.2
+      '@walletconnect/utils': 2.20.2(typescript@5.8.3)
       events: 3.3.0
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -5991,7 +6078,7 @@ snapshots:
     dependencies:
       tslib: 1.14.1
 
-  '@walletconnect/types@2.19.1':
+  '@walletconnect/types@2.20.2':
     dependencies:
       '@walletconnect/events': 1.0.1
       '@walletconnect/heartbeat': 1.2.2
@@ -6019,7 +6106,7 @@ snapshots:
       - ioredis
       - uploadthing
 
-  '@walletconnect/utils@2.19.1(typescript@5.8.3)':
+  '@walletconnect/utils@2.20.2(typescript@5.8.3)':
     dependencies:
       '@noble/ciphers': 1.2.1
       '@noble/curves': 1.8.1
@@ -6030,12 +6117,11 @@ snapshots:
       '@walletconnect/relay-auth': 1.1.0
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
-      '@walletconnect/types': 2.19.1
+      '@walletconnect/types': 2.20.2
       '@walletconnect/window-getters': 1.0.1
       '@walletconnect/window-metadata': 1.0.1
       bs58: 6.0.0
       detect-browser: 5.3.0
-      elliptic: 6.6.1
       query-string: 7.1.3
       uint8arrays: 3.1.0
       viem: 2.23.2(typescript@5.8.3)
@@ -6189,7 +6275,7 @@ snapshots:
 
   bip39@3.1.0:
     dependencies:
-      '@noble/hashes': 1.3.0
+      '@noble/hashes': 1.8.0
 
   blake2b-wasm@1.1.7:
     dependencies:
@@ -6199,8 +6285,6 @@ snapshots:
     dependencies:
       blake2b-wasm: 1.1.7
       nanoassert: 1.1.0
-
-  bn.js@4.12.2: {}
 
   body-parser@1.20.3:
     dependencies:
@@ -6233,8 +6317,6 @@ snapshots:
   braces@3.0.3:
     dependencies:
       fill-range: 7.1.1
-
-  brorand@1.1.0: {}
 
   browserslist@4.25.0:
     dependencies:
@@ -6421,7 +6503,7 @@ snapshots:
     dependencies:
       cipher-base: 1.0.6
       inherits: 2.0.4
-      ripemd160: 2.0.1
+      ripemd160: 2.0.2
       sha.js: 2.4.11
 
   create-hash@1.2.0:
@@ -6573,16 +6655,6 @@ snapshots:
 
   electron-to-chromium@1.5.172: {}
 
-  elliptic@6.6.1:
-    dependencies:
-      bn.js: 4.12.2
-      brorand: 1.1.0
-      hash.js: 1.1.7
-      hmac-drbg: 1.0.1
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-      minimalistic-crypto-utils: 1.0.1
-
   emoji-regex@10.4.0: {}
 
   emoji-regex@8.0.0: {}
@@ -6699,6 +6771,9 @@ snapshots:
   escape-string-regexp@2.0.0: {}
 
   estree-walker@0.6.1: {}
+
+  estree-walker@2.0.2:
+    optional: true
 
   ethereum-cryptography@2.2.1:
     dependencies:
@@ -6919,20 +6994,9 @@ snapshots:
       readable-stream: 3.6.2
       safe-buffer: 5.2.1
 
-  hash.js@1.1.7:
-    dependencies:
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
-
-  hmac-drbg@1.0.1:
-    dependencies:
-      hash.js: 1.1.7
-      minimalistic-assert: 1.0.1
-      minimalistic-crypto-utils: 1.0.1
 
   hosted-git-info@8.1.0:
     dependencies:
@@ -7425,9 +7489,8 @@ snapshots:
 
   mimic-function@5.0.1: {}
 
-  minimalistic-assert@1.0.1: {}
-
-  minimalistic-crypto-utils@1.0.1: {}
+  mini-svg-data-uri@1.4.4:
+    optional: true
 
   minimatch@3.1.2:
     dependencies:
@@ -7673,7 +7736,7 @@ snapshots:
     dependencies:
       '@adraffy/ens-normalize': 1.11.0
       '@noble/curves': 1.8.1
-      '@noble/hashes': 1.7.1
+      '@noble/hashes': 1.8.0
       '@scure/bip32': 1.6.2
       '@scure/bip39': 1.5.4
       abitype: 1.0.8(typescript@5.8.3)
@@ -7944,6 +8007,11 @@ snapshots:
   react-is@18.3.1: {}
 
   react-property@2.0.2: {}
+
+  react-style-stringify@1.2.0:
+    dependencies:
+      '@emotion/unitless': 0.10.0
+    optional: true
 
   react@18.3.1:
     dependencies:
