@@ -10,6 +10,7 @@ import { getStore } from '@multiversx/sdk-dapp/out/store/store';
 @Injectable()
 export abstract class BaseStoreSubscriptionService implements OnDestroy {
   protected readonly destroy$ = new Subject<void>();
+  private storeUnsubscribe?: () => void;
 
   constructor() {
     this.initializeStoreSubscription();
@@ -20,18 +21,14 @@ export abstract class BaseStoreSubscriptionService implements OnDestroy {
    */
   private initializeStoreSubscription(): void {
     const store = getStore();
-    
+
     // Convert Redux store subscription to Observable-like pattern
     const storeSubscription = () => {
       this.onStoreChange();
     };
 
-    const unsubscribe = store.subscribe(storeSubscription);
-    
-    // Clean up subscription when destroy$ emits
-    this.destroy$.subscribe(() => {
-      unsubscribe();
-    });
+    // Store the unsubscribe function as a class property
+    this.storeUnsubscribe = store.subscribe(storeSubscription);
   }
 
   /**
@@ -47,6 +44,12 @@ export abstract class BaseStoreSubscriptionService implements OnDestroy {
   protected abstract initializeData(): void;
 
   ngOnDestroy(): void {
+    // Clean up the store subscription
+    if (this.storeUnsubscribe) {
+      this.storeUnsubscribe();
+      this.storeUnsubscribe = undefined;
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -56,8 +59,10 @@ export abstract class BaseStoreSubscriptionService implements OnDestroy {
  * Base class for components that need MultiversX SDK store subscriptions
  * Use this for components that need to react to account or network changes
  */
+@Injectable()
 export abstract class BaseStoreSubscriptionComponent implements OnDestroy {
   protected readonly destroy$ = new Subject<void>();
+  private storeUnsubscribe?: () => void;
 
   constructor() {
     this.initializeStoreSubscription();
@@ -68,17 +73,13 @@ export abstract class BaseStoreSubscriptionComponent implements OnDestroy {
    */
   private initializeStoreSubscription(): void {
     const store = getStore();
-    
+
     const storeSubscription = () => {
       this.onStoreChange();
     };
 
-    const unsubscribe = store.subscribe(storeSubscription);
-    
-    // Clean up subscription when destroy$ emits
-    this.destroy$.subscribe(() => {
-      unsubscribe();
-    });
+    // Store the unsubscribe function as a class property
+    this.storeUnsubscribe = store.subscribe(storeSubscription);
   }
 
   /**
@@ -94,6 +95,12 @@ export abstract class BaseStoreSubscriptionComponent implements OnDestroy {
   protected abstract initializeData(): void;
 
   ngOnDestroy(): void {
+    // Clean up the store subscription
+    if (this.storeUnsubscribe) {
+      this.storeUnsubscribe();
+      this.storeUnsubscribe = undefined;
+    }
+
     this.destroy$.next();
     this.destroy$.complete();
   }

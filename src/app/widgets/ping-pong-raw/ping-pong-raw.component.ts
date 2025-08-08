@@ -109,21 +109,13 @@ export class PingPongRawComponent implements OnInit, OnDestroy {
   }
 
   async onSendPingTransaction(): Promise<void> {
-    try {
-      await this.pingPongService.sendPingTransaction();
-      this.pendingTransactions = this.pingPongService.getPendingTransactions();
-    } catch (error) {
-      console.error('Error sending ping transaction:', error);
-    }
+    await this.pingPongService.sendPingTransaction();
+    this.pendingTransactions = this.pingPongService.getPendingTransactions();
   }
 
   async onSendPongTransaction(): Promise<void> {
-    try {
-      await this.pingPongService.sendPongTransaction();
-      this.pendingTransactions = this.pingPongService.getPendingTransactions();
-    } catch (error) {
-      console.error('Error sending pong transaction:', error);
-    }
+    await this.pingPongService.sendPongTransaction();
+    this.pendingTransactions = this.pingPongService.getPendingTransactions();
   }
 
   clearError(): void {

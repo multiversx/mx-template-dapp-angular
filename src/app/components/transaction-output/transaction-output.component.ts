@@ -1,10 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LabelComponent } from '../label/label.component';
 import { FormatAmountComponent } from '../format-amount/format-amount.component';
-import { MxLinkComponent } from '../mx-link/mx-link.component';
 import { SignedTransactionType } from '../ping-pong-output/ping-pong-output.component';
-import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
+import { MultiversXCoreService } from '../../services/multiversx-core.service';
 import { getExplorerLink } from '@multiversx/sdk-dapp/out/utils/transactions/getExplorerLink';
 
 @Component({
@@ -13,15 +12,22 @@ import { getExplorerLink } from '@multiversx/sdk-dapp/out/utils/transactions/get
   imports: [CommonModule, LabelComponent, FormatAmountComponent],
   templateUrl: './transaction-output.component.html',
 })
-export class TransactionOutputComponent {
+export class TransactionOutputComponent implements OnInit {
   @Input() transaction?: SignedTransactionType;
   label: string = '';
   explorerAddress: string = '';
 
+  constructor(private multiversXCore: MultiversXCoreService) {}
+
   ngOnInit() {
-    const { network } = getNetworkConfig();
-    this.label = network.egldLabel;
-    this.explorerAddress = network.explorerAddress;
+    const networkConfig = this.multiversXCore.getCurrentNetworkConfig();
+    if (networkConfig) {
+      this.label = networkConfig.egldLabel;
+      this.explorerAddress = networkConfig.explorerUrl;
+    } else {
+      this.label = 'EGLD';
+      this.explorerAddress = '';
+    }
   }
 
   get decodedData(): string {

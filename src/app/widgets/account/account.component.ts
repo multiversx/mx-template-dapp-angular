@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
 import { FormatAmountComponent } from '../../components';
-import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
-import { BaseStoreSubscriptionComponent } from '../../services/base-store-subscription.service';
+import {
+  MultiversXCoreService,
+  AccountInfo,
+  NetworkConfigInfo,
+} from '../../services/multiversx-core.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-account',
@@ -19,7 +23,9 @@ import { BaseStoreSubscriptionComponent } from '../../services/base-store-subscr
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
-export class AccountComponent extends BaseStoreSubscriptionComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   address: string = '';
   balance: string = '';
   shard: number = 0;
@@ -27,33 +33,39 @@ export class AccountComponent extends BaseStoreSubscriptionComponent implements 
   label: string = '';
   isLoading: boolean = true;
 
+  constructor(private multiversXCore: MultiversXCoreService) {}
+
   ngOnInit() {
-    // Initial data load is handled by base class
-    this.initializeData();
+    this.multiversXCore.accountAndNetwork$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ account, network }) => {
+        this.updateAccountData(account, network);
+      });
   }
 
-  protected initializeData(): void {
-    this.updateAccountData();
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  protected onStoreChange(): void {
-    // React to store changes by updating account data
-    this.updateAccountData();
-  }
-
-  private updateAccountData(): void {
-    const account = getAccount();
-    const { network } = getNetworkConfig();
-
+  private updateAccountData(
+    account: AccountInfo | null,
+    network: NetworkConfigInfo | null
+  ): void {
     if (account) {
       this.address = account.address;
-      this.balance = account.balance.toString();
-      this.shard = account.shard || 0;
-      this.nonce = account.nonce || 0;
-      this.label = network.egldLabel;
+      this.balance = account.balance;
+      this.shard = account.shard;
+      this.nonce = account.nonce;
+      this.label = network?.egldLabel || 'EGLD';
       this.isLoading = false;
+    } else {
+      this.address = '';
+      this.balance = '';
+      this.shard = 0;
+      this.nonce = 0;
+      this.label = 'EGLD';
+      this.isLoading = true;
     }
   }
-
-  // Note: ngOnDestroy is handled by BaseStoreSubscriptionComponent
 }

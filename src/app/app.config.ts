@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  ErrorHandler,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
@@ -9,12 +10,15 @@ import { UnlockPageComponent } from './unlock-page/unlock-page.component';
 import { DashboardPageComponent } from './dashboard-page/dashboard-page.component';
 import { AuthRedirectGuard } from './guards/auth-redirect.guard';
 import { RouteNamesEnum } from './route-names.enum';
+import { GlobalErrorHandlerService } from './services/global-error-handler.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(),
+    // Global Error Handler
+    { provide: ErrorHandler, useClass: GlobalErrorHandlerService },
     provideRouter([
       {
         path: '',
