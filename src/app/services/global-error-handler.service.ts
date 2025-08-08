@@ -1,4 +1,4 @@
-import { Injectable, ErrorHandler } from '@angular/core';
+import { Injectable, ErrorHandler, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AppError } from '../types/common.types';
 
@@ -60,7 +60,10 @@ export interface ErrorNotification {
 @Injectable({
   providedIn: 'root',
 })
-export class GlobalErrorHandlerService extends ErrorHandler {
+export class GlobalErrorHandlerService
+  extends ErrorHandler
+  implements OnDestroy
+{
   private readonly errorNotificationsSubject = new BehaviorSubject<
     ErrorNotification[]
   >([]);
@@ -74,8 +77,42 @@ export class GlobalErrorHandlerService extends ErrorHandler {
   // Error counter for debugging
   private errorCount = 0;
 
+  // Map to track setTimeout IDs to prevent memory leaks
+  private readonly timeoutMap = new Map<
+    string,
+    ReturnType<typeof setTimeout>
+  >();
+
   constructor() {
     super();
+  }
+
+  /**
+   * Clean up all timeouts on service destruction
+   */
+  ngOnDestroy(): void {
+    this.clearAllTimeouts();
+  }
+
+  /**
+   * Clear all active timeouts
+   */
+  private clearAllTimeouts(): void {
+    this.timeoutMap.forEach(timeoutId => {
+      clearTimeout(timeoutId);
+    });
+    this.timeoutMap.clear();
+  }
+
+  /**
+   * Clear a specific timeout by notification ID
+   */
+  private clearTimeout(notificationId: string): void {
+    const timeoutId = this.timeoutMap.get(notificationId);
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      this.timeoutMap.delete(notificationId);
+    }
   }
 
   /**
@@ -235,9 +272,10 @@ export class GlobalErrorHandlerService extends ErrorHandler {
 
     // Auto-hide if specified
     if (notification.autoHide && notification.duration) {
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         this.dismissError(notification.id);
       }, notification.duration);
+      this.timeoutMap.set(notification.id, timeoutId);
     }
   }
 
@@ -252,6 +290,7 @@ export class GlobalErrorHandlerService extends ErrorHandler {
     if (updated.length === 0) {
       this.isShowingErrorSubject.next(false);
     }
+    this.clearTimeout(errorId);
   }
 
   /**
@@ -260,6 +299,7 @@ export class GlobalErrorHandlerService extends ErrorHandler {
   public clearAllErrors(): void {
     this.errorNotificationsSubject.next([]);
     this.isShowingErrorSubject.next(false);
+    this.clearAllTimeouts();
   }
 
   /**
@@ -381,6 +421,31 @@ export class GlobalErrorHandlerService extends ErrorHandler {
     return this.errorNotificationsSubject.value.filter(
       notification => notification.error.category === category
     );
+  }
+
+  /**
+   * Execute action for actionable errors
+   */
+  public executeAction(action: string): void {
+    switch (action) {
+      case 'retry':
+        // For retry actions, we typically want to reload the current page or retry the last operation
+        // This is a generic retry - specific retry logic should be handled by the component that triggered the error
+        window.location.reload();
+        break;
+      case 'reconnect':
+        // For reconnect actions, we want to redirect to the unlock page to reconnect the wallet
+        window.location.href = '/unlock';
+        break;
+      case 'add-funds':
+        // For add-funds actions, we want to redirect to a page where users can add funds
+        // This could be an external exchange or a funding page
+        window.open('https://xexchange.com', '_blank');
+        break;
+      default:
+        console.warn(`Unknown action: ${action}`);
+        break;
+    }
   }
 
   /**

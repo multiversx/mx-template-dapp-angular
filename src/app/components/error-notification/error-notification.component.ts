@@ -155,6 +155,9 @@ export class ErrorNotificationComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Execute the action before dismissing the error
+    this.errorHandler.executeAction(error.error.actionable.action);
+
     // Dismiss error after action
     this.dismissError(error.id);
   }
