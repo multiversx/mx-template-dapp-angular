@@ -262,7 +262,7 @@ export class MultiversXCoreService extends BaseStoreSubscriptionService {
       sender: Address.newFromBech32(account.address),
       receiver: Address.newFromBech32(params.receiver),
       value: BigInt(params.value || '0'),
-      gasLimit: BigInt(GAS_LIMIT),
+      gasLimit: BigInt(GAS_LIMIT * 2),
       gasPrice: BigInt(GAS_PRICE),
       chainID: params.chainId || networkConfig.chainId,
       nonce: BigInt(account.nonce),
