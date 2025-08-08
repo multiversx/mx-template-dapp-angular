@@ -1,10 +1,9 @@
 import { Component, Input, OnInit, OnDestroy, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BaseComponentProps } from '../../types/common.types';
 
-export interface FormatAmountProps {
+export interface FormatAmountProps extends BaseComponentProps {
   value: string;
-  className?: string;
-  'data-testid'?: string;
   showLabel?: boolean;
   egldLabel?: string;
   digits?: number;
@@ -16,7 +15,7 @@ export interface FormatAmountProps {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <span [class]="className" [attr.data-testid]="dataTestId">
+    <span [class]="cssClass" [attr.data-testid]="dataTestId">
       <span class="amount-integer">{{ valueInteger }}</span
       ><span class="amount-decimal" *ngIf="valueDecimal"
         >.{{ valueDecimal }}</span
@@ -28,7 +27,7 @@ export interface FormatAmountProps {
 })
 export class FormatAmountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() value: string = '';
-  @Input() className?: string;
+  @Input() cssClass?: string;
   @Input() dataTestId?: string;
   @Input() showLabel?: boolean = true;
   @Input() egldLabel?: string = 'EGLD';

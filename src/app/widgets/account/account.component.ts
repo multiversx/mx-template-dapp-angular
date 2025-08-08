@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
 import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getStore } from '@multiversx/sdk-dapp/out/store/store';
 import { FormatAmountComponent } from '../../components';
 import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
+import { BaseStoreSubscriptionComponent } from '../../services/base-store-subscription.service';
 
 @Component({
   selector: 'app-account',
@@ -19,27 +19,29 @@ import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNe
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
-export class AccountComponent implements OnInit, OnDestroy {
+export class AccountComponent extends BaseStoreSubscriptionComponent implements OnInit {
   address: string = '';
   balance: string = '';
   shard: number = 0;
   nonce: number = 0;
   label: string = '';
   isLoading: boolean = true;
-  storeUnsubscribe: (() => void) | undefined;
 
-  async ngOnInit() {
-    // Initial load
-    this.updateAccount();
-
-    // Subscribe to store changes
-    const store = getStore();
-    this.storeUnsubscribe = store.subscribe(() => {
-      this.updateAccount();
-    });
+  ngOnInit() {
+    // Initial data load is handled by base class
+    this.initializeData();
   }
 
-  updateAccount() {
+  protected initializeData(): void {
+    this.updateAccountData();
+  }
+
+  protected onStoreChange(): void {
+    // React to store changes by updating account data
+    this.updateAccountData();
+  }
+
+  private updateAccountData(): void {
     const account = getAccount();
     const { network } = getNetworkConfig();
 
@@ -53,9 +55,5 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    if (this.storeUnsubscribe) {
-      this.storeUnsubscribe();
-    }
-  }
+  // Note: ngOnDestroy is handled by BaseStoreSubscriptionComponent
 }

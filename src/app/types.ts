@@ -1,3 +1,3 @@
-export interface WithClassnameType {
-  className?: string;
+export interface WithCssClassType {
+  cssClass?: string;
 } 

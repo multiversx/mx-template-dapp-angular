@@ -187,7 +187,7 @@ export class PingPongService implements OnDestroy {
     return new BigNumber(decodedString, 16).toNumber();
   }
 
-  private handleError(message: string, error: any): void {
+  private handleError(message: string, error: unknown): void {
     console.error(message, error);
     this.errorSubject.next(message);
     this.loadingSubject.next(false);

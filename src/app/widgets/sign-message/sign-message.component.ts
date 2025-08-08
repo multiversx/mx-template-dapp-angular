@@ -13,6 +13,17 @@ import { ButtonComponent } from '../../components/button/button.component';
 import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
 import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
 import { Message } from '@multiversx/sdk-core/out';
+import { ComponentState } from '../../types/common.types';
+
+/**
+ * Interface for signed message response from MultiversX SDK
+ */
+interface SignedMessageResponse {
+  /** The signature as Uint8Array */
+  signature: Uint8Array;
+  /** The message data as Uint8Array */
+  data: Uint8Array;
+}
 
 @Component({
   selector: 'app-sign-message',
@@ -30,8 +41,8 @@ import { Message } from '@multiversx/sdk-core/out';
 })
 export class SignMessageComponent {
   message: string = '';
-  signedMessage: any = null;
-  state: 'pending' | 'success' | 'error' = 'pending';
+  signedMessage: SignedMessageResponse | null = null;
+  state: ComponentState = 'pending';
   signature: string = '';
   address: string = '';
 

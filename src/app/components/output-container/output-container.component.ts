@@ -10,6 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class OutputContainerComponent {
   @Input() isLoading: boolean = false;
-  @Input() className: string = 'p-4';
+  @Input() cssClass: string = 'p-4';
   @Input() dataTestId?: string;
 } 

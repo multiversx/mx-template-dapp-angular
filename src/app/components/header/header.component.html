@@ -1,6 +1,6 @@
 <header class="flex flex-row align-center justify-between pl-6 pr-6 pt-6">
   <app-mx-link
-    [className]="'flex items-center justify-between'"
+    [cssClass]="'flex items-center justify-between'"
     [to]="isLoggedIn ? routeNames.dashboard : routeNames.home"
   >
     <img src="/multiversx-logo.svg" alt="MultiversX" class="w-full h-6" />
@@ -19,7 +19,7 @@
         <app-notifications-button></app-notifications-button>
         <app-button
           (onClick)="handleLogout()"
-          [className]="'inline-block rounded-lg px-3 py-2 text-center hover:no-underline my-0 text-gray-600 hover:bg-slate-100 mx-0'"
+          [cssClass]="'inline-block rounded-lg px-3 py-2 text-center hover:no-underline my-0 text-gray-600 hover:bg-slate-100 mx-0'"
         >
           Close
         </app-button>
