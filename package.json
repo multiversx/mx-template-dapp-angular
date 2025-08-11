@@ -4,13 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "start-mainnet": "ng serve --configuration production",
-    "start-testnet": "ng serve --configuration testnet",
-    "start-devnet": "ng serve",
-    "build-mainnet": "ng build --configuration production",
-    "build-testnet": "ng build --configuration testnet",
-    "build-devnet": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "start-mainnet": "ng serve --configuration=production",
+    "start-testnet": "ng serve --configuration=testnet",
+    "start-devnet": "ng serve --configuration=development",
+    "build-mainnet": "ng build --configuration=production",
+    "build-testnet": "ng build --configuration=testnet",
+    "build-devnet": "ng build --configuration=development",
+    "watch": "ng build --watch --configuration=development",
     "test": "ng test"
   },
   "browser": {

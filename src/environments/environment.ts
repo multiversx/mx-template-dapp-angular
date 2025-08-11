@@ -8,6 +8,6 @@ export const environment = {
   API_URL,
   contractAddress: 'erd1qqqqqqqqqqqqqpgqm6ad6xrsjvxlcdcffqe8w58trpec09ug9l5qde96pq',
   environment: EnvironmentsEnum.devnet,
-  authenticatedDomains: [API_URL],
+  sampleAuthenticatedDomains: [API_URL],
   ...sharedConfig
 };

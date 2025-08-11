@@ -16,7 +16,7 @@ import {
   distinctUntilChanged,
 } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { contractAddress } from '../../config';
+import { environment } from '../../environments/environment';
 import { Address, Transaction } from '@multiversx/sdk-core/out';
 import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
 import BigNumber from 'bignumber.js';
@@ -159,7 +159,7 @@ export class PingPongService implements OnDestroy {
     }
 
     const body = {
-      scAddress: contractAddress,
+      scAddress: environment.contractAddress,
       funcName,
       args,
     };
@@ -218,7 +218,7 @@ export class PingPongService implements OnDestroy {
       const pingAmount = await this.fetchPingAmount();
 
       const pingTransaction = this.multiversXCore.createTransaction({
-        receiver: contractAddress,
+        receiver: environment.contractAddress,
         value: pingAmount,
         data: 'ping',
       });
@@ -242,7 +242,7 @@ export class PingPongService implements OnDestroy {
 
     try {
       const pongTransaction = this.multiversXCore.createTransaction({
-        receiver: contractAddress,
+        receiver: environment.contractAddress,
         value: '0',
         data: 'pong',
       });

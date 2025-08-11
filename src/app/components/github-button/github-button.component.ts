@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { GITHUB_REPO_URL } from '../../../config';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-github-button',
@@ -13,5 +13,5 @@ import { GITHUB_REPO_URL } from '../../../config';
 })
 export class GitHubButtonComponent {
   faGithub = faGithub;
-  GITHUB_REPO_URL = GITHUB_REPO_URL;
+  GITHUB_REPO_URL = environment.GITHUB_REPO_URL;
 }
