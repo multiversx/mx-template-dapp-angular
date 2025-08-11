@@ -32,14 +32,13 @@
             "styles": [
               "src/styles.css"
             ],
-            "define": {
-              "global": "globalThis"
-            },
-            "externalDependencies": [
-              "crypto",
-              "path",
-              "fs",
-              "stream"
+            "allowedCommonJsDependencies": [
+              "buffer",
+              "crypto-browserify",
+              "stream-browserify",
+              "path-browserify",
+              "util",
+              "process"
             ]
           },
           "configurations": {
@@ -48,7 +47,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "3MB",
-                  "maximumError": "4MB"
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
