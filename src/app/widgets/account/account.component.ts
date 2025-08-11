@@ -10,6 +10,7 @@ import {
 } from '../../services/multiversx-core.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { getEgldLabel } from '@multiversx/sdk-dapp/out/methods/network/getEgldLabel';
 
 @Component({
   selector: 'app-account',
@@ -52,19 +53,21 @@ export class AccountComponent implements OnInit, OnDestroy {
     account: AccountInfo | null,
     network: NetworkConfigInfo | null
   ): void {
+    const egldLabel = getEgldLabel();
+
     if (account) {
       this.address = account.address;
       this.balance = account.balance;
       this.shard = account.shard;
       this.nonce = account.nonce;
-      this.label = network?.egldLabel || 'EGLD';
+      this.label = network?.egldLabel || egldLabel;
       this.isLoading = false;
     } else {
       this.address = '';
       this.balance = '';
       this.shard = 0;
       this.nonce = 0;
-      this.label = 'EGLD';
+      this.label = egldLabel;
       this.isLoading = true;
     }
   }

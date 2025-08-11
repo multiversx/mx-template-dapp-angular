@@ -15,9 +15,6 @@ import { Message } from '@multiversx/sdk-core/out';
 import { ComponentState } from '../../types/common.types';
 import { BaseReactiveStateComponent } from '../../services/base-reactive-state.service';
 
-/**
- * Interface for signed message response from MultiversX SDK
- */
 interface SignedMessageResponse {
   /** The signature as Uint8Array (optional from provider) */
   signature?: Uint8Array;
@@ -42,7 +39,8 @@ interface SignedMessageResponse {
 export class SignMessageComponent extends BaseReactiveStateComponent {
   // Reactive state
   private readonly messageState = this.createState<string>('');
-  private readonly signedMessageState = this.createState<SignedMessageResponse | null>(null);
+  private readonly signedMessageState =
+    this.createState<SignedMessageResponse | null>(null);
   private readonly signatureState = this.createState<string>('');
   private readonly addressState = this.createState<string>('');
 
@@ -52,7 +50,6 @@ export class SignMessageComponent extends BaseReactiveStateComponent {
   public readonly signature$ = this.signatureState.observable;
   public readonly address$ = this.addressState.observable;
 
-  // For backward compatibility and template binding
   get message(): string {
     return this.messageState.get();
   }
@@ -77,7 +74,6 @@ export class SignMessageComponent extends BaseReactiveStateComponent {
     return this.addressState.get();
   }
 
-  // FontAwesome icons
   readonly faPen = faPen;
   readonly faBroom = faBroom;
   readonly faRotateRight = faRotateRight;
@@ -99,7 +95,6 @@ export class SignMessageComponent extends BaseReactiveStateComponent {
 
         const currentMessage = this.messageState.get();
 
-        // Create a Message object from the message
         const messageToSign = new Message({
           data: Buffer.from(currentMessage, 'utf8'),
         });
@@ -116,10 +111,10 @@ export class SignMessageComponent extends BaseReactiveStateComponent {
         const signature = signedMessage.signature
           ? Buffer.from(signedMessage.signature).toString('hex')
           : '';
-        
+
         this.signatureState.set(signature);
         this.signedMessageState.set(signedMessage);
-        this.messageState.set(''); // Clear input after successful signing
+        this.messageState.set('');
 
         return signedMessage;
       },
@@ -127,19 +122,17 @@ export class SignMessageComponent extends BaseReactiveStateComponent {
       'message-signing'
     );
 
-    // Result will be null if there was an error (handled by base class)
     return result;
   }
 
   handleClear(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-    
-    // Clear all reactive state
+
     this.signatureState.set('');
     this.signedMessageState.set(null);
     this.messageState.set('');
-    this.clearError(); // This also resets to pending state
+    this.clearError();
   }
 
   get encodedMessage(): string {

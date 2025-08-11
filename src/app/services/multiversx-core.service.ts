@@ -12,6 +12,7 @@ import {
   GAS_LIMIT,
   GAS_PRICE,
 } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
+import { getEgldLabel } from '@multiversx/sdk-dapp/out/methods/network/getEgldLabel';
 
 // Base classes
 import { BaseStoreSubscriptionService } from './base-store-subscription.service';
@@ -23,6 +24,7 @@ import {
 
 // Types
 import { NetworkEnvironment } from '../types/common.types';
+import { EnvironmentsEnum } from '@multiversx/sdk-dapp/out/types/enums.types';
 
 /**
  * Account information interface
@@ -94,7 +96,7 @@ export class MultiversXCoreService extends BaseStoreSubscriptionService {
   );
 
   public readonly egldLabel$ = this.networkConfig$.pipe(
-    map(config => config?.egldLabel || 'EGLD'),
+    map(config => config?.egldLabel || getEgldLabel()),
     distinctUntilChanged()
   );
 
@@ -191,13 +193,13 @@ export class MultiversXCoreService extends BaseStoreSubscriptionService {
   private mapEnvironment(chainId: string): NetworkEnvironment {
     switch (chainId) {
       case 'D':
-        return 'devnet';
+        return EnvironmentsEnum.devnet;
       case 'T':
-        return 'testnet';
+        return EnvironmentsEnum.testnet;
       case '1':
-        return 'mainnet';
+        return EnvironmentsEnum.mainnet;
       default:
-        return 'devnet';
+        return EnvironmentsEnum.devnet;
     }
   }
 
