@@ -2,10 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getStore } from '@multiversx/sdk-dapp/out/store/store';
 import { FormatAmountComponent } from '../../components';
-import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
+import {
+  MultiversXCoreService,
+  AccountInfo,
+  NetworkConfigInfo,
+} from '../../services/multiversx-core.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { getEgldLabel } from '@multiversx/sdk-dapp/out/methods/network/getEgldLabel';
 
 @Component({
   selector: 'app-account',
@@ -20,42 +25,50 @@ import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNe
   styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   address: string = '';
   balance: string = '';
   shard: number = 0;
   nonce: number = 0;
   label: string = '';
   isLoading: boolean = true;
-  storeUnsubscribe: (() => void) | undefined;
 
-  async ngOnInit() {
-    // Initial load
-    this.updateAccount();
+  constructor(private multiversXCore: MultiversXCoreService) {}
 
-    // Subscribe to store changes
-    const store = getStore();
-    this.storeUnsubscribe = store.subscribe(() => {
-      this.updateAccount();
-    });
-  }
-
-  updateAccount() {
-    const account = getAccount();
-    const { network } = getNetworkConfig();
-
-    if (account) {
-      this.address = account.address;
-      this.balance = account.balance.toString();
-      this.shard = account.shard || 0;
-      this.nonce = account.nonce || 0;
-      this.label = network.egldLabel;
-      this.isLoading = false;
-    }
+  ngOnInit() {
+    this.multiversXCore.accountAndNetwork$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(({ account, network }) => {
+        this.updateAccountData(account, network);
+      });
   }
 
   ngOnDestroy() {
-    if (this.storeUnsubscribe) {
-      this.storeUnsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private updateAccountData(
+    account: AccountInfo | null,
+    network: NetworkConfigInfo | null
+  ): void {
+    const egldLabel = getEgldLabel();
+
+    if (account) {
+      this.address = account.address;
+      this.balance = account.balance;
+      this.shard = account.shard;
+      this.nonce = account.nonce;
+      this.label = network?.egldLabel || egldLabel;
+      this.isLoading = false;
+    } else {
+      this.address = '';
+      this.balance = '';
+      this.shard = 0;
+      this.nonce = 0;
+      this.label = egldLabel;
+      this.isLoading = true;
     }
   }
 }

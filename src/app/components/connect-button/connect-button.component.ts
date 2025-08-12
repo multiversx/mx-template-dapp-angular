@@ -12,7 +12,7 @@ import { ButtonComponent } from '../button/button.component';
   styleUrls: ['./connect-button.component.css']
 })
 export class ConnectButtonComponent {
-  @Input() className: string = 'inline-block rounded-lg px-3 py-2 text-center hover:no-underline my-0 bg-blue-600 text-white hover:bg-blue-700 mr-0';
+  @Input() cssClass: string = 'inline-block rounded-lg px-3 py-2 text-center hover:no-underline my-0 bg-blue-600 text-white hover:bg-blue-700 mr-0';
 
   constructor(
     private router: Router

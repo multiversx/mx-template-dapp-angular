@@ -1,0 +1,73 @@
+/* Error Notification Animations */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+.animate-fade-out {
+  animation: fade-out 0.2s ease-in forwards;
+}
+
+/* Error notification styling */
+.error-notification {
+  backdrop-filter: blur(8px);
+  transition: all 0.2s ease-in-out;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.error-notification:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .error-notification {
+    max-width: calc(100vw - 32px);
+    margin: 0 16px;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .error-notification {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-slide-in {
+    animation: none;
+  }
+  
+  .error-notification {
+    transition: none;
+  }
+  
+  .error-notification:hover {
+    transform: none;
+  }
+}

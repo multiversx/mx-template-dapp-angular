@@ -10,9 +10,17 @@ import {
 import { OutputContainerComponent } from '../../components/output-container/output-container.component';
 import { LabelComponent } from '../../components/label/label.component';
 import { ButtonComponent } from '../../components/button/button.component';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
+import { MultiversXCoreService } from '../../services/multiversx-core.service';
 import { Message } from '@multiversx/sdk-core/out';
+import { ComponentState } from '../../types/common.types';
+import { BaseReactiveStateComponent } from '../../services/base-reactive-state.service';
+
+interface SignedMessageResponse {
+  /** The signature as Uint8Array (optional from provider) */
+  signature?: Uint8Array;
+  /** The message data as Uint8Array */
+  data: Uint8Array;
+}
 
 @Component({
   selector: 'app-sign-message',
@@ -28,81 +36,119 @@ import { Message } from '@multiversx/sdk-core/out';
   templateUrl: './sign-message.component.html',
   styleUrls: ['./sign-message.component.css'],
 })
-export class SignMessageComponent {
-  message: string = '';
-  signedMessage: any = null;
-  state: 'pending' | 'success' | 'error' = 'pending';
-  signature: string = '';
-  address: string = '';
+export class SignMessageComponent extends BaseReactiveStateComponent {
+  // Reactive state
+  private readonly messageState = this.createState<string>('');
+  private readonly signedMessageState =
+    this.createState<SignedMessageResponse | null>(null);
+  private readonly signatureState = this.createState<string>('');
+  private readonly addressState = this.createState<string>('');
 
-  // FontAwesome icons
-  faPen = faPen;
-  faBroom = faBroom;
-  faRotateRight = faRotateRight;
+  // Public observables for template
+  public readonly message$ = this.messageState.observable;
+  public readonly signedMessage$ = this.signedMessageState.observable;
+  public readonly signature$ = this.signatureState.observable;
+  public readonly address$ = this.addressState.observable;
+
+  get message(): string {
+    return this.messageState.get();
+  }
+
+  set message(value: string) {
+    this.messageState.set(value);
+  }
+
+  get signedMessage(): SignedMessageResponse | null {
+    return this.signedMessageState.get();
+  }
+
+  get state(): ComponentState {
+    return this.currentComponentState;
+  }
+
+  get signature(): string {
+    return this.signatureState.get();
+  }
+
+  get address(): string {
+    return this.addressState.get();
+  }
+
+  readonly faPen = faPen;
+  readonly faBroom = faBroom;
+  readonly faRotateRight = faRotateRight;
+
+  constructor(private multiversXCore: MultiversXCoreService) {
+    super();
+  }
 
   async handleSubmit() {
-    try {
-      // Get the account data from the store
-      const account = getAccount();
-      this.address = account.address || '';
+    const result = await this.executeWithState(
+      async () => {
+        const validation = this.multiversXCore.validateUserSession();
+        if (!validation.isValid) {
+          throw new Error(validation.error || 'Invalid session');
+        }
 
-      if (!this.address) {
-        console.error('No account address found');
-        this.state = 'error';
-        return;
-      }
+        const accountAddress = this.multiversXCore.getCurrentAccountAddress();
+        this.addressState.set(accountAddress);
 
-      console.log('Signing message:', this.message);
+        const currentMessage = this.messageState.get();
 
-      // Create a Message object from the message
-      const messageToSign = new Message({
-        data: Buffer.from(this.message, 'utf8'),
-      });
+        const messageToSign = new Message({
+          data: Buffer.from(currentMessage, 'utf8'),
+        });
 
-      // Get the account provider and sign the message
-      const provider = getAccountProvider();
-      const signedMessage = await provider.signMessage(messageToSign);
+        // Get the account provider and sign the message
+        const provider = await this.multiversXCore.getProvider();
+        const signedMessage = await provider.signMessage(messageToSign);
 
-      if (!signedMessage) {
-        console.error('No signed message found');
-        this.state = 'error';
-        return;
-      }
+        if (!signedMessage) {
+          throw new Error('No signed message returned from provider');
+        }
 
-      // Extract the signature from the signed message
-      this.signature = signedMessage.signature
-        ? Buffer.from(signedMessage.signature).toString('hex')
-        : '';
-      this.state = 'success';
-      this.signedMessage = signedMessage;
-      this.message = '';
-    } catch (error) {
-      console.error('Error signing message:', error);
-      this.state = 'error';
-    }
+        // Extract the signature from the signed message
+        const signature = signedMessage.signature
+          ? Buffer.from(signedMessage.signature).toString('hex')
+          : '';
+
+        this.signatureState.set(signature);
+        this.signedMessageState.set(signedMessage);
+        this.messageState.set('');
+
+        return signedMessage;
+      },
+      'Signing message...',
+      'message-signing'
+    );
+
+    return result;
   }
 
   handleClear(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
-    this.signature = '';
-    this.signedMessage = null;
-    this.state = 'pending';
-    this.message = '';
+
+    this.signatureState.set('');
+    this.signedMessageState.set(null);
+    this.messageState.set('');
+    this.clearError();
   }
 
   get encodedMessage(): string {
-    if (!this.signedMessage) return '';
+    const signedMessage = this.signedMessageState.get();
+    if (!signedMessage) return '';
     return (
       '0x' +
-      Array.from(this.signedMessage.data, (byte: number) =>
+      Array.from(signedMessage.data, (byte: number) =>
         byte.toString(16).padStart(2, '0')
       ).join('')
     );
   }
 
   get decodedMessage(): string {
-    if (!this.signedMessage) return '';
-    return new TextDecoder().decode(this.signedMessage.data);
+    const signedMessage = this.signedMessageState.get();
+    if (!signedMessage) return '';
+    return new TextDecoder().decode(signedMessage.data);
   }
 }

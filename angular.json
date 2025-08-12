@@ -32,24 +32,29 @@
             "styles": [
               "src/styles.css"
             ],
-            // Uncomment for build to work
-            // "define": {
-            //   "global": "globalThis"
-            // },
-            // "externalDependencies": [
-            //   "crypto",
-            //   "path",
-            //   "fs",
-            //   "stream"
-            // ]
+            "allowedCommonJsDependencies": [
+              "buffer",
+              "crypto-browserify",
+              "stream-browserify",
+              "path-browserify",
+              "util",
+              "process",
+              "lodash.isstring",
+              "lodash.isequal", 
+              "lodash.isempty",
+              "lodash.startcase",
+              "lodash.uniq",
+              "lodash.trimend",
+              "@lifeomic/axios-fetch"
+            ]
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "3MB"
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -57,7 +62,34 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "testnet": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3MB",
+                  "maximumError": "5MB"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4kB",
+                  "maximumError": "8kB"
+                }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.testnet.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
@@ -77,6 +109,9 @@
           "configurations": {
             "production": {
               "buildTarget": "mx-template-dapp-angular:build:production"
+            },
+            "testnet": {
+              "buildTarget": "mx-template-dapp-angular:build:testnet"
             },
             "development": {
               "buildTarget": "mx-template-dapp-angular:build:development"

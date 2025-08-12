@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TransactionsOutputComponent } from '../transactions-output/transactions-output.component';
-import { contractAddress } from '../../../config';
+import { environment } from '../../../environments/environment';
 
 export interface SignedTransactionType {
   hash: string;
@@ -21,5 +21,5 @@ export interface SignedTransactionType {
 export class PingPongOutputComponent {
   @Input() transactions?: SignedTransactionType[] | null = null;
 
-  contractAddress = contractAddress;
+  contractAddress = environment.contractAddress;
 }

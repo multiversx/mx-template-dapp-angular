@@ -3,7 +3,6 @@ import {
   BehaviorSubject,
   Observable,
   timer,
-  EMPTY,
   Subject,
   of,
   firstValueFrom,
@@ -17,16 +16,15 @@ import {
   distinctUntilChanged,
 } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
-import { contractAddress } from '../../config';
+import { environment } from '../../environments/environment';
 import { Address, Transaction } from '@multiversx/sdk-core/out';
 import { GAS_PRICE } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
 import BigNumber from 'bignumber.js';
-import { getAccount } from '@multiversx/sdk-dapp/out/methods/account/getAccount';
-import { getNetworkConfig } from '@multiversx/sdk-dapp/out/methods/network/getNetworkConfig';
-import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/accountProvider';
 import { TransactionManager } from '@multiversx/sdk-dapp/out/managers/TransactionManager';
 import { SignedTransactionType } from '../components/ping-pong-output/ping-pong-output.component';
 import { getPendingTransactions } from '@multiversx/sdk-dapp/out/methods/transactions/getPendingTransactions';
+import { GlobalErrorHandlerService } from './global-error-handler.service';
+import { MultiversXCoreService } from './multiversx-core.service';
 
 export interface PingPongResponseType {
   data: {
@@ -79,7 +77,11 @@ export class PingPongService implements OnDestroy {
     shareReplay(1)
   );
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private multiversXCore: MultiversXCoreService,
+    private errorHandler: GlobalErrorHandlerService
+  ) {
     this.initializeAutoRefresh();
   }
 
@@ -119,26 +121,29 @@ export class PingPongService implements OnDestroy {
 
       return this.decodeAmount(data);
     } catch (error) {
-      console.error('Unable to call getPingAmount', error);
+      this.errorHandler.handleBlockchainError(error, 'getPingAmount');
       return '0';
     }
   }
 
   private fetchTimeToPong(): Observable<number | null> {
-    const account = getAccount();
+    const account = this.multiversXCore.getCurrentAccount();
 
     try {
+      if (!account) {
+        return of(null);
+      }
       const args = new Address(account.address).toHex();
 
       return this.makeVmQuery('getTimeToPong', [args]).pipe(
         map(data => this.decodeTime(data)),
         catchError(error => {
-          console.error('Unable to call getTimeToPong', error);
+          this.errorHandler.handleBlockchainError(error, 'getTimeToPong');
           return of(0);
         })
       );
     } catch (error) {
-      console.error('Invalid address format', error);
+      this.errorHandler.handleValidationError(error, 'address-format');
       return of(0);
     }
   }
@@ -147,16 +152,20 @@ export class PingPongService implements OnDestroy {
     funcName: string,
     args: string[]
   ): Observable<PingPongResponseType> {
-    const networkConfig = getNetworkConfig();
+    const networkConfig = this.multiversXCore.getCurrentNetworkConfig();
+
+    if (!networkConfig) {
+      throw new Error('Network configuration not available');
+    }
 
     const body = {
-      scAddress: contractAddress,
+      scAddress: environment.contractAddress,
       funcName,
       args,
     };
 
     return this.http.post<PingPongResponseType>(
-      `${networkConfig.network.apiAddress}/vm-values/query`,
+      `${networkConfig.apiUrl}/vm-values/query`,
       body
     );
   }
@@ -187,9 +196,12 @@ export class PingPongService implements OnDestroy {
     return new BigNumber(decodedString, 16).toNumber();
   }
 
-  private handleError(message: string, error: any): void {
-    console.error(message, error);
-    this.errorSubject.next(message);
+  private handleError(message: string, error: unknown): void {
+    const enhancedError = this.errorHandler.handleBlockchainError(
+      error,
+      message
+    );
+    this.errorSubject.next(enhancedError.userMessage);
     this.loadingSubject.next(false);
   }
 
@@ -204,18 +216,11 @@ export class PingPongService implements OnDestroy {
 
     try {
       const pingAmount = await this.fetchPingAmount();
-      const account = getAccount();
-      const networkConfig = getNetworkConfig();
 
-      const pingTransaction = new Transaction({
-        value: BigInt(pingAmount),
-        data: Buffer.from('ping'),
-        receiver: new Address(contractAddress),
-        gasLimit: BigInt(6000000),
-        gasPrice: BigInt(GAS_PRICE),
-        chainID: networkConfig.network.chainId,
-        sender: new Address(account.address),
-        version: 1,
+      const pingTransaction = this.multiversXCore.createTransaction({
+        receiver: environment.contractAddress,
+        value: pingAmount,
+        data: 'ping',
       });
 
       const sessionId = await this.signAndSendTransactions(
@@ -236,18 +241,10 @@ export class PingPongService implements OnDestroy {
     this.errorSubject.next(null);
 
     try {
-      const account = getAccount();
-      const networkConfig = getNetworkConfig();
-
-      const pongTransaction = new Transaction({
-        value: BigInt(0),
-        data: Buffer.from('pong'),
-        receiver: new Address(contractAddress),
-        gasLimit: BigInt(6000000),
-        gasPrice: BigInt(GAS_PRICE),
-        chainID: networkConfig.network.chainId,
-        sender: new Address(account.address),
-        version: 1,
+      const pongTransaction = this.multiversXCore.createTransaction({
+        receiver: environment.contractAddress,
+        value: '0',
+        data: 'pong',
       });
 
       const sessionId = await this.signAndSendTransactions(
@@ -267,7 +264,7 @@ export class PingPongService implements OnDestroy {
     transactions: Transaction[],
     transactionsDisplayInfo?: TransactionsDisplayInfoType
   ): Promise<string> {
-    const provider = getAccountProvider();
+    const provider = await this.multiversXCore.getProvider();
     const txManager = TransactionManager.getInstance();
 
     const signedTransactions = await provider.signTransactions(transactions);

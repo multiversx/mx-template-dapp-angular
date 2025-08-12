@@ -36,6 +36,10 @@ yarn-error.log
 /libpeerconnection.log
 testem.log
 /typings
+/docs
+CLAUDE.md
+.claude
+.bmad-core
 
 # System files
 .DS_Store

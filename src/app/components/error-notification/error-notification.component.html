@@ -1,0 +1,95 @@
+<!-- Error Notification Overlay -->
+@if (isVisible && errorNotifications.length > 0) {
+<div class="fixed top-4 right-4 z-50 max-w-md space-y-2 animate-slide-in">
+  <!-- Individual Error Notifications -->
+  @for (notification of errorNotifications; track trackByErrorId($index,
+  notification)) {
+  <div [class]="getErrorClasses(notification)" role="alert" aria-live="polite">
+    <!-- Error Icon -->
+    <div class="flex-shrink-0">
+      <fa-icon
+        [icon]="getErrorIcon(notification)"
+        [class]="getIconClasses(notification)"
+        size="lg"
+      ></fa-icon>
+    </div>
+
+    <!-- Error Content -->
+    <div class="flex-grow min-w-0">
+      <!-- Error Header -->
+      <div class="flex items-start justify-between mb-1">
+        <h4 class="font-semibold text-sm">
+          {{ getSeverityDisplayName(notification.error.severity) }}
+        </h4>
+        <button
+          (click)="dismissError(notification.id)"
+          class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 rounded"
+          aria-label="Dismiss error"
+        >
+          <fa-icon [icon]="faTimes" size="sm"></fa-icon>
+        </button>
+      </div>
+
+      <!-- User Message -->
+      <p class="text-sm mb-2">
+        {{ notification.error.userMessage }}
+      </p>
+
+      <!-- Technical Details (expandable for development) -->
+      @if (notification.error.technicalMessage) {
+      <details class="text-xs opacity-75 mb-2">
+        <summary class="cursor-pointer hover:opacity-100">
+          Technical Details
+        </summary>
+        <p class="mt-1 font-mono">{{ notification.error.technicalMessage }}</p>
+      </details>
+      }
+
+      <!-- Action Button -->
+      @if (notification.error.actionable) {
+      <div class="flex justify-end">
+        <button
+          (click)="handleAction(notification)"
+          class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors"
+          [class]="
+            notification.error.severity === ErrorSeverity.CRITICAL ||
+            notification.error.severity === ErrorSeverity.HIGH
+              ? 'text-red-700 bg-red-100 hover:bg-red-200 focus:ring-red-500'
+              : notification.error.severity === ErrorSeverity.MEDIUM
+              ? 'text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:ring-yellow-500'
+              : 'text-blue-700 bg-blue-100 hover:bg-blue-200 focus:ring-blue-500'
+          "
+        >
+          @if (notification.error.actionable.action === 'retry') {
+          <fa-icon [icon]="faRedo" size="xs" class="mr-1"></fa-icon>
+          } @if (notification.error.actionable.action === 'reconnect') {
+          <fa-icon [icon]="faWallet" size="xs" class="mr-1"></fa-icon>
+          } @if (notification.error.actionable.action === 'add-funds') {
+          <fa-icon [icon]="faDollarSign" size="xs" class="mr-1"></fa-icon>
+          }
+          {{ notification.error.actionable.label }}
+        </button>
+      </div>
+      }
+
+      <!-- Timestamp -->
+      <div class="text-xs opacity-60 mt-2">
+        {{ formatTimestamp(notification.timestamp) }}
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Clear All Button (if multiple errors) -->
+  @if (errorNotifications.length > 1) {
+  <div class="flex justify-center pt-2">
+    <button
+      (click)="clearAllErrors()"
+      class="text-xs text-gray-500 hover:text-gray-700 underline focus:outline-none"
+    >
+      Clear All Notifications
+    </button>
+  </div>
+  }
+</div>
+}
