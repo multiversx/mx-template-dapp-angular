@@ -13,7 +13,7 @@
     "build": "ng build --configuration=development",
     "watch": "ng build --watch --configuration=development",
     "test": "ng test",
-    "preview": "ng serve --ssl --port 8082 --configuration=development"
+    "preview": "ng serve --ssl"
   },
   "browser": {
     "global": "global",
