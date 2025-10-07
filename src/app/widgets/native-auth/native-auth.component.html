@@ -1,0 +1,72 @@
+<div class="native-auth-container flex flex-col gap-8">
+  <div *ngIf="showMissingNativeAuthError" class="native-auth-missing-error">
+    <app-output-container>
+      <div class="native-auth-missing-profile flex items-center gap-1">
+        <p class="text-red-600">Native Auth token is missing. Please connect your wallet.</p>
+      </div>
+    </app-output-container>
+  </div>
+
+  <div *ngIf="showProfileError" class="native-auth-profile-error">
+    <app-output-container>
+      <div class="native-auth-missing-profile flex items-center gap-1">
+        <p class="text-red-600">Unable to load profile</p>
+      </div>
+    </app-output-container>
+  </div>
+
+  <div *ngIf="!showMissingNativeAuthError && !showProfileError" class="native-auth-content">
+    <div class="native-auth-address-container flex flex-col gap-2">
+      <app-label>Address</app-label>
+      
+      <app-output-container [isLoading]="isLoading">
+        <div class="native-auth-address flex justify-between w-full">
+          <a 
+            [href]="getAddressExplorerUrl()" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-blue-600 hover:text-blue-800 underline"
+            [title]="getExplorerLinkText()"
+          >
+            {{ getExplorerLinkText() }}
+          </a>
+        </div>
+      </app-output-container>
+    </div>
+
+    <div class="native-auth-details flex flex-col gap-4 w-full">
+      <div class="native-auth-detail-container flex flex-col gap-2 sm:w-full">
+        <app-label>Herotag</app-label>
+        
+        <app-output-container [isLoading]="isLoading">
+          <div class="native-auth-herotag">
+            <span>{{ account?.address || 'N/A' }}</span>
+          </div>
+        </app-output-container>
+      </div>
+
+      <div class="native-auth-detail-container flex flex-col gap-2 sm:w-full">
+        <app-label>Shard</app-label>
+        
+        <app-output-container [isLoading]="isLoading">
+          <p>{{ account?.shard ?? 'N/A' }}</p>
+        </app-output-container>
+      </div>
+
+      <div class="native-auth-detail-container flex flex-col gap-2 sm:w-full">
+        <app-label>Balance</app-label>
+        
+        <app-output-container [isLoading]="isLoading">
+          <div class="native-auth-amount flex gap-1">
+            <app-format-amount
+              [value]="account?.balance || '0'"
+              [showLabel]="true"
+              [egldLabel]="network?.egldLabel || 'EGLD'"
+              data-testid="balance"
+            />
+          </div>
+        </app-output-container>
+      </div>
+    </div>
+  </div>
+</div>

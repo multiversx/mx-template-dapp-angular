@@ -10,6 +10,7 @@ async function main() {
   initApp({
     storage: { getStorageCallback: () => sessionStorage },
     dAppConfig: {
+      nativeAuth: true,
       environment: EnvironmentsEnum.devnet,
       transactionTracking: {
         successfulToastLifetime: 5000,
