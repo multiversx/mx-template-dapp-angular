@@ -14,3 +14,4 @@ export { PingPongOutputComponent } from './ping-pong-output/ping-pong-output.com
 export { TransactionsOutputComponent } from './transactions-output/transactions-output.component';
 export { TransactionOutputComponent } from './transaction-output/transaction-output.component';
 export { GitHubButtonComponent } from './github-button/github-button.component';
+export { MissingNativeAuthErrorComponent } from './missing-native-auth/missing-native-auth.component';

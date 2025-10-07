@@ -9,6 +9,7 @@ import {
   AccountComponent,
   PingPongRawComponent,
   SignMessageComponent,
+  NativeAuthComponent,
 } from '../widgets';
 
 const WIDGETS: WidgetType[] = [
@@ -25,6 +26,13 @@ const WIDGETS: WidgetType[] = [
       'Smart Contract interactions using manually formulated transactions',
     reference:
       'https://docs.multiversx.com/sdk-and-tools/indices/es-index-transactions/',
+  },
+  {
+    title: 'Native auth',
+    widget: NativeAuthComponent,
+    description:
+      'A secure authentication token can be used to interact with the backend',
+    reference: 'https://github.com/multiversx/mx-sdk-js-native-auth-server',
   },
   {
     title: 'Sign message',

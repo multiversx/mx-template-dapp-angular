@@ -9,10 +9,11 @@
     "start-devnet": "ng serve --configuration=development",
     "build-mainnet": "ng build --configuration=production",
     "build-testnet": "ng build --configuration=testnet",
+    "build-devnet": "ng build --configuration=development",
     "build": "ng build --configuration=development",
     "watch": "ng build --watch --configuration=development",
     "test": "ng test",
-    "preview": "npx http-server dist/mx-template-dapp-angular/browser"
+    "preview": "ng serve --ssl --port 8082 --configuration=development"
   },
   "browser": {
     "global": "global",
