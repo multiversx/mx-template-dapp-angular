@@ -23,7 +23,7 @@ export class ConnectButtonComponent {
       loginHandler: () => {
         this.router.navigate([RouteNamesEnum.dashboard]);
       },
-      onClose: () => {}
+      onClose: async () => {}
     });
     unlockPanelManager.openUnlockPanel();
   }
