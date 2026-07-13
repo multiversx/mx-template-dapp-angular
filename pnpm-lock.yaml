@@ -39,14 +39,14 @@ importers:
         specifier: ^15.4.1
         version: 15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0)
       '@multiversx/sdk-dapp':
-        specifier: ^5.6.23
-        version: 5.6.23(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@3.0.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1))(@types/react@19.2.2)(axios@1.18.1)(bignumber.js@9.3.1)(protobufjs@7.4.0)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vue@3.5.39(typescript@5.8.3))(zod@4.1.13)
+        specifier: ^5.7.0
+        version: 5.7.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@3.1.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1))(@types/react@19.2.2)(axios@1.18.1)(bignumber.js@9.3.1)(protobufjs@7.4.0)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vue@3.5.39(typescript@5.8.3))(zod@4.1.13)
       '@multiversx/sdk-dapp-ui':
         specifier: ^0.1.24
         version: 0.1.24(@types/react@19.2.2)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(vue@3.5.39(typescript@5.8.3))
       '@multiversx/sdk-dapp-utils':
-        specifier: ^3.0.2
-        version: 3.0.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)
+        specifier: ^3.1.0
+        version: 3.1.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)
       axios:
         specifier: ^1.18.1
         version: 1.18.1
@@ -1045,8 +1045,8 @@ packages:
   '@ledgerhq/logs@6.13.0':
     resolution: {integrity: sha512-4+qRW2Pc8V+btL0QEmdB2X+uyx0kOWMWE1/LWsq5sZy3Q5tpi4eItJS6mB0XL3wGW59RQ+8bchNQQ1OW/va8Og==}
 
-  '@lifeomic/axios-fetch@3.0.1':
-    resolution: {integrity: sha512-bwEgYXtGrn/F+yYqoUIAWBRzyqQ7yB1VL84gCq0uAk36GRoyoWyOzbE35VWeXlmkkoby91FnAwh4UhgayMM/og==}
+  '@lifeomic/axios-fetch@3.1.0':
+    resolution: {integrity: sha512-C6ceAnh8W19KuekFsCiK1A+AMBirQFTnoEqMZQ7HE6VXJ18zjGofdXxLU8RTo2gZp/yZK5ufmPwIvRtejj1gxg==}
     engines: {node: '>=12'}
 
   '@listr2/prompt-adapter-inquirer@3.0.1':
@@ -1154,20 +1154,20 @@ packages:
     resolution: {integrity: sha512-p2Dnqh9CMmlYxSwH4ks+qjqsvzQ6ak8CEIZxAJ+Xj6tYiB8r4sgqamPDkSLsxn9114nxud7bkdw2mvJ+kepRLQ==}
     engines: {node: '>=20.19.0'}
 
-  '@multiversx/sdk-dapp-utils@3.0.2':
-    resolution: {integrity: sha512-x2b2Gz5j0mDPUV2UK0fyDideGq/tfznvFJUJIJUMfKRy9Frni26UXZuQXCN4ngs344fd+8XoJOeviNV6cXSFdw==}
+  '@multiversx/sdk-dapp-utils@3.1.0':
+    resolution: {integrity: sha512-m3u2ymm+ME/+6Hbu0iNmi+CQbuImNOc8GeX+KtdW0tihQrMwEuWIECj/U5EapEFbGMlNbPb/YmwiMMfQ1bk/fQ==}
     peerDependencies:
       '@multiversx/sdk-core': ^14.0.0 || ^15.0.0
       bignumber.js: ^9.x
 
-  '@multiversx/sdk-dapp@5.6.23':
-    resolution: {integrity: sha512-2tPrhyZ+liKWbwzm2I4Hd1erbaA47lUh9ms7+k0DzAdn78QmWTvYI4/+0SjM1R8/jyHXR0TT5NdWbqBr78YTzQ==}
+  '@multiversx/sdk-dapp@5.7.0':
+    resolution: {integrity: sha512-DIjRzkp9ebZ+iR8yNVCTzyHI5DKU+jxpIe6NN7gM+L7bfRqopUD14VxmAbLXxI3J5ub91hKXbr2XHI/veIw7Og==}
     peerDependencies:
       '@multiversx/sdk-core': ^14.x || ^15.x
       '@multiversx/sdk-dapp-utils': ^3.x
-      axios: '>=1.10.0'
+      axios: '>=1.15.0'
       bignumber.js: ^9.x
-      protobufjs: ^7.2.6
+      protobufjs: ^7.5.5
 
   '@multiversx/sdk-extension-provider@5.1.2':
     resolution: {integrity: sha512-jxu18WKnc8ZLaLdl6ePcLStG2aZB1f9W0m2wPJt2UbHnPMhnk/okoYZYWlHfiF/L8WZGzQn8VXwcmras/vdwlw==}
@@ -1334,10 +1334,6 @@ packages:
 
   '@noble/curves@1.9.1':
     resolution: {integrity: sha512-k11yZxZg+t+gWvBbIswW0yoJlu8cHOC7dhunwOzoWH/mXGBiYyR4YY6hAEK/3EUs4UpB8la1RfdRpeGsFHkWsA==}
-    engines: {node: ^14.21.3 || >=16}
-
-  '@noble/curves@1.9.2':
-    resolution: {integrity: sha512-HxngEd2XUcg9xi20JkwlLCtYwfoFw4JGkuZpT+WlsPD4gB/cxkvTD8fSsoAnphGZhFdZYKeQIPCuFlWPm1uE0g==}
     engines: {node: ^14.21.3 || >=16}
 
   '@noble/curves@1.9.7':
@@ -2468,9 +2464,6 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  csstype@3.1.3:
-    resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==}
-
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
@@ -2622,8 +2615,8 @@ packages:
     resolution: {integrity: sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg==}
     engines: {node: '>= 0.8'}
 
-  engine.io-client@6.5.4:
-    resolution: {integrity: sha512-GeZeeRjpD2qf49cZQ0Wvh/8NJNfeXkXXcoGh+F77oEAgo9gUHwT1fCRxSNU+YEEaysOJTnsFHmM5oAcPy4ntvQ==}
+  engine.io-client@6.6.6:
+    resolution: {integrity: sha512-iY6QdftLQ9pyiPoX082bpf/u1UewnOaJrtJIF9T0++QB34lZrj0uP+Q/bj8AlUsAxqhnkTV2BS8SBZSxOmoV5Q==}
 
   engine.io-parser@5.2.3:
     resolution: {integrity: sha512-HqD3yTBfnBxIrbnM1DoD6Pcq8NECnh8d4As1Qgh0z5Gg3jRRIqijury0CL3ghu/edArpUYiYqQiDUQBIs4np3Q==}
@@ -2811,10 +2804,6 @@ packages:
   foreground-child@3.3.1:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
-
-  form-data@4.0.4:
-    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
-    engines: {node: '>= 6'}
 
   form-data@4.0.6:
     resolution: {integrity: sha512-vKatAh4SlVfgbv+YtmhiRjhEMJsYpsG1Y2rMQtR+SVSbytsSD1YGzDIcrAJmdFec88u/+VoGmxnl+80gL1tRCQ==}
@@ -3278,8 +3267,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  linkifyjs@4.3.2:
-    resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==}
+  linkifyjs@4.3.3:
+    resolution: {integrity: sha512-P8aEP5U/D1/IlTY2OeYsErdwh9bGuLE30NcXtKEjgdHcahveQoQwM2yZNsioQHsWFz0P7KKudisbrzCgR0sDHg==}
 
   listr2@9.0.1:
     resolution: {integrity: sha512-SL0JY3DaxylDuo/MecFeiC+7pedM0zia33zl0vcjgwcq1q1FWWF1To9EIauPbl8GbMCU0R2e0uJ8bZunhYKD2g==}
@@ -3315,8 +3304,8 @@ packages:
   lodash.startcase@4.4.0:
     resolution: {integrity: sha512-+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==}
 
-  lodash.trimend@4.5.1:
-    resolution: {integrity: sha512-lsD+k73XztDsMBKPKvzHXRKFNMohTjoTKIIo4ADLn5dA65LZ1BqlAvSXhR2rPEC3BgAUQnzMnorqDtqn2z4IHA==}
+  lodash.trimend@4.18.0:
+    resolution: {integrity: sha512-8w2M3nZAWLN1OX/6mTPCwRlZiD/LhVyPV9l7DEbkd9wybExvg9AcCjbD19swj6oVzX5hcMZHp3/Y1b4Sl3sHKg==}
 
   lodash.uniq@4.5.0:
     resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
@@ -4163,8 +4152,8 @@ packages:
   socket.io-adapter@2.5.5:
     resolution: {integrity: sha512-eLDQas5dzPgOWCk9GuuJC2lBqItuhKI4uxGgo9aIV7MYbk2h9Q6uULEh8WBzThoI7l+qU9Ast9fVUmkqPP9wYg==}
 
-  socket.io-client@4.7.5:
-    resolution: {integrity: sha512-sJ/tqHOCe7Z50JCBCXrsY3I2k03iOiUe+tj1OmKeD2lXPiGH/RUCdTZFoqVyN7l1MnpIzPrGtLcijffmeouNlQ==}
+  socket.io-client@4.8.3:
+    resolution: {integrity: sha512-uP0bpjWrjQmUt5DTHq9RuoCBdFJF10cdX9X+a368j/Ft0wmaVgxlrjvK3kjvgCODOMMOz9lcaRzxmso0bTWZ/g==}
     engines: {node: '>=10.0.0'}
 
   socket.io-parser@4.2.4:
@@ -4628,8 +4617,20 @@ packages:
       utf-8-validate:
         optional: true
 
-  xmlhttprequest-ssl@2.0.0:
-    resolution: {integrity: sha512-QKxVRxiRACQcVuQEYFsI1hhkrMlrXHPegbbd1yn9UHOmRxY+si12nQYzri3vbzt8VdTTRviqcKxcyllFas5z2A==}
+  ws@8.21.0:
+    resolution: {integrity: sha512-Vsp28b7DRcimFQvrqu2Wek3z1iYxDCWqHYB8Qsnk/S4RfaCQzPGPyBNuVjJV3cd6UiKtUtp6sNM77gWvzcCH+g==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+  xmlhttprequest-ssl@2.1.2:
+    resolution: {integrity: sha512-TEU+nJVUUnA4CYJFLvK5X9AOeH4KvDvhIfm0vV1GaQRtchnG0hgK5p8hw/xjv8cunWYCsiPCSDzObPyhEwq3KQ==}
     engines: {node: '>=0.4.0'}
 
   y18n@4.0.3:
@@ -5554,7 +5555,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 24.7.0
+      '@types/node': 24.13.2
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -5632,7 +5633,7 @@ snapshots:
 
   '@ledgerhq/logs@6.13.0': {}
 
-  '@lifeomic/axios-fetch@3.0.1':
+  '@lifeomic/axios-fetch@3.1.0':
     dependencies:
       '@types/node-fetch': 2.6.13
 
@@ -5756,16 +5757,16 @@ snapshots:
       - vue
       - vue-router
 
-  '@multiversx/sdk-dapp-utils@3.0.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)':
+  '@multiversx/sdk-dapp-utils@3.1.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)':
     dependencies:
       '@multiversx/sdk-core': 15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0)
       bignumber.js: 9.3.1
 
-  '@multiversx/sdk-dapp@5.6.23(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@3.0.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1))(@types/react@19.2.2)(axios@1.18.1)(bignumber.js@9.3.1)(protobufjs@7.4.0)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vue@3.5.39(typescript@5.8.3))(zod@4.1.13)':
+  '@multiversx/sdk-dapp@5.7.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(@multiversx/sdk-dapp-utils@3.1.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1))(@types/react@19.2.2)(axios@1.18.1)(bignumber.js@9.3.1)(protobufjs@7.4.0)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(typescript@5.8.3)(vue@3.5.39(typescript@5.8.3))(zod@4.1.13)':
     dependencies:
-      '@lifeomic/axios-fetch': 3.0.1
+      '@lifeomic/axios-fetch': 3.1.0
       '@multiversx/sdk-core': 15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0)
-      '@multiversx/sdk-dapp-utils': 3.0.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)
+      '@multiversx/sdk-dapp-utils': 3.1.0(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))(bignumber.js@9.3.1)
       '@multiversx/sdk-extension-provider': 5.1.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))
       '@multiversx/sdk-hw-provider': 8.1.2(@multiversx/sdk-core@15.4.1(bignumber.js@9.3.1)(protobufjs@7.4.0))
       '@multiversx/sdk-native-auth-client': 2.0.1(axios@1.18.1)
@@ -5776,15 +5777,15 @@ snapshots:
       axios: 1.18.1
       bignumber.js: 9.3.1
       immer: 10.1.1
-      linkifyjs: 4.3.2
+      linkifyjs: 4.3.3
       lodash.isempty: 4.4.0
       lodash.isequal: 4.5.0
       lodash.isstring: 4.0.1
       lodash.startcase: 4.4.0
-      lodash.trimend: 4.5.1
+      lodash.trimend: 4.18.0
       lodash.uniq: 4.5.0
       protobufjs: 7.4.0
-      socket.io-client: 4.7.5
+      socket.io-client: 4.8.3
       zustand: 4.4.7(@types/react@19.2.2)(immer@10.1.1)(react@18.3.1)
     optionalDependencies:
       '@multiversx/sdk-dapp-ui': 0.1.24(@types/react@19.2.2)(react-dom@19.2.0(react@18.3.1))(react@18.3.1)(vue@3.5.39(typescript@5.8.3))
@@ -5971,10 +5972,6 @@ snapshots:
       '@noble/hashes': 1.7.0
 
   '@noble/curves@1.9.1':
-    dependencies:
-      '@noble/hashes': 1.8.0
-
-  '@noble/curves@1.9.2':
     dependencies:
       '@noble/hashes': 1.8.0
 
@@ -6322,7 +6319,7 @@ snapshots:
 
   '@scure/bip32@1.7.0':
     dependencies:
-      '@noble/curves': 1.9.2
+      '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
       '@scure/base': 1.2.6
 
@@ -6435,8 +6432,8 @@ snapshots:
 
   '@types/node-fetch@2.6.13':
     dependencies:
-      '@types/node': 24.7.0
-      form-data: 4.0.4
+      '@types/node': 24.13.2
+      form-data: 4.0.6
 
   '@types/node@11.11.6': {}
 
@@ -6452,7 +6449,7 @@ snapshots:
 
   '@types/react@19.2.2':
     dependencies:
-      csstype: 3.1.3
+      csstype: 3.2.3
 
   '@types/stack-utils@2.0.3': {}
 
@@ -7281,8 +7278,6 @@ snapshots:
 
   cssesc@3.0.0: {}
 
-  csstype@3.1.3: {}
-
   csstype@3.2.3: {}
 
   custom-event@1.0.1: {}
@@ -7415,13 +7410,13 @@ snapshots:
 
   encodeurl@2.0.0: {}
 
-  engine.io-client@6.5.4:
+  engine.io-client@6.6.6:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7
+      debug: 4.4.3
       engine.io-parser: 5.2.3
-      ws: 8.17.1
-      xmlhttprequest-ssl: 2.0.0
+      ws: 8.21.0
+      xmlhttprequest-ssl: 2.1.2
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -7680,14 +7675,6 @@ snapshots:
     dependencies:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
-
-  form-data@4.0.4:
-    dependencies:
-      asynckit: 0.4.0
-      combined-stream: 1.0.8
-      es-set-tostringtag: 2.1.0
-      hasown: 2.0.2
-      mime-types: 2.1.35
 
   form-data@4.0.6:
     dependencies:
@@ -8098,7 +8085,7 @@ snapshots:
 
   jest-message-util@29.7.0:
     dependencies:
-      '@babel/code-frame': 7.27.1
+      '@babel/code-frame': 7.29.7
       '@jest/types': 29.6.3
       '@types/stack-utils': 2.0.3
       chalk: 4.1.2
@@ -8111,7 +8098,7 @@ snapshots:
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 24.7.0
+      '@types/node': 24.13.2
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -8215,7 +8202,7 @@ snapshots:
 
   lines-and-columns@1.2.4: {}
 
-  linkifyjs@4.3.2: {}
+  linkifyjs@4.3.3: {}
 
   listr2@9.0.1:
     dependencies:
@@ -8261,7 +8248,7 @@ snapshots:
 
   lodash.startcase@4.4.0: {}
 
-  lodash.trimend@4.5.1: {}
+  lodash.trimend@4.18.0: {}
 
   lodash.uniq@4.5.0: {}
 
@@ -8838,7 +8825,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.7.0
+      '@types/node': 24.13.2
       long: 5.3.2
 
   proxy-addr@2.0.7:
@@ -8869,7 +8856,7 @@ snapshots:
 
   qs@6.11.2:
     dependencies:
-      side-channel: 1.1.0
+      side-channel: 1.1.1
 
   qs@6.13.0:
     dependencies:
@@ -9241,11 +9228,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  socket.io-client@4.7.5:
+  socket.io-client@4.8.3:
     dependencies:
       '@socket.io/component-emitter': 3.1.2
-      debug: 4.3.7
-      engine.io-client: 6.5.4
+      debug: 4.4.3
+      engine.io-client: 6.6.6
       socket.io-parser: 4.2.4
     transitivePeerDependencies:
       - bufferutil
@@ -9674,7 +9661,9 @@ snapshots:
 
   ws@8.17.1: {}
 
-  xmlhttprequest-ssl@2.0.0: {}
+  ws@8.21.0: {}
+
+  xmlhttprequest-ssl@2.1.2: {}
 
   y18n@4.0.3: {}
 
