@@ -9,7 +9,7 @@ import { getAccountProvider } from '@multiversx/sdk-dapp/out/providers/helpers/a
 import { getIsLoggedIn } from '@multiversx/sdk-dapp/out/methods/account/getIsLoggedIn';
 import { Address, Transaction } from '@multiversx/sdk-core/out';
 import {
-  GAS_LIMIT,
+  EXTRA_GAS_LIMIT_GUARDED_TX,
   GAS_PRICE,
 } from '@multiversx/sdk-dapp/out/constants/mvx.constants';
 import { getEgldLabel } from '@multiversx/sdk-dapp/out/methods/network/getEgldLabel';
@@ -24,6 +24,7 @@ import {
 
 // Types
 import { NetworkEnvironment } from '../types/common.types';
+import { environment } from '../../environments/environment';
 import { EnvironmentsEnum } from '@multiversx/sdk-dapp/out/types/enums.types';
 
 /**
@@ -264,7 +265,7 @@ export class MultiversXCoreService extends BaseStoreSubscriptionService {
       sender: Address.newFromBech32(account.address),
       receiver: Address.newFromBech32(params.receiver),
       value: BigInt(params.value || '0'),
-      gasLimit: BigInt(GAS_LIMIT * 2),
+      gasLimit: BigInt(2_500_000) + BigInt(EXTRA_GAS_LIMIT_GUARDED_TX),
       gasPrice: BigInt(GAS_PRICE),
       chainID: params.chainId || networkConfig.chainId,
       nonce: BigInt(account.nonce),

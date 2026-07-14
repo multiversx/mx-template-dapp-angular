@@ -1,0 +1,9 @@
+allowBuilds:
+  '@parcel/watcher': false
+  esbuild: false
+  keccak: false
+  lmdb: false
+  msgpackr-extract: false
+  protobufjs: false
+minimumReleaseAgeExclude:
+  - '@multiversx/*'
