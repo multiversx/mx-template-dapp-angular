@@ -1,17 +1,17 @@
 import './polyfills';
 import { initApp } from '@multiversx/sdk-dapp/out/methods/initApp/initApp';
-import { EnvironmentsEnum } from '@multiversx/sdk-dapp/out/types/enums.types';
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
+import { environment } from './environments/environment';
 
 async function main() {
   initApp({
     storage: { getStorageCallback: () => sessionStorage },
     dAppConfig: {
       nativeAuth: true,
-      environment: EnvironmentsEnum.devnet,
+      environment: environment.environment,
       transactionTracking: {
         successfulToastLifetime: 5000,
       },

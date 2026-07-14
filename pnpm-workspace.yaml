@@ -5,3 +5,5 @@ allowBuilds:
   lmdb: false
   msgpackr-extract: false
   protobufjs: false
+minimumReleaseAgeExclude:
+  - '@multiversx/*'
